@@ -2,9 +2,9 @@
 <html>
   <head>
     <script src="https://cdn.jsdelivr.net/combine/npm/tone@14.7.58,npm/@magenta/music@1.23.1/es6/core.js,npm/focus-visible@5,npm/html-midi-player@1.5.0"></script>
-    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"> 
     <script type="text/javaScript" src="./app.js"></script>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="playerStyle.css">
     <title>This is the title of the webpage!</title>
   </head>
   <body onload="main()">
@@ -31,7 +31,49 @@
       </midi-player>
     </section>
 
-    <button onclick="getMIDIRequest()">Send MIDI request</button>
+    <div class="modelInput">
+      <h2>Model input</h2>
+      <table>
+        <tr>
+          <td>
+            <label for="tempoType">Tempo:</label>
+          </td>
+          <td>
+            <select name="tempoType" id="selectedTempo">
+            <option value="Fast">Fast</option>
+            <option value="Normal">Normal</option>
+            <option value="Slow">Slow</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <label for="soundsRange">Sounds range:</label>
+          </td>
+          <td>
+            <select name="soundsRange" id="selectedSoundsRange">
+            <option value="High">High</option>
+            <option value="Low">Low</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <label for="volumeLevel">Volume level:</label>
+          </td>
+          <td>
+            <select name="volumeLevel" id="selectedVolumeLevel">
+              <option value="High">High</option>
+              <option value="Normal">Normal</option>
+              <option value="Low">Low</option>
+            </select>
+          </td>
+        </tr>
+      </table>
+      <button onclick="getMIDIRequest()">Send MIDI request</button>
+      <br>
+      <label id="requestLog"></label>
+    </div>
 
   </body>
 </html>

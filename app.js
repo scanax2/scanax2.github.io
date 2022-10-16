@@ -22,21 +22,59 @@ function updateVisualizerType() {
 
 function getMIDIRequest() {
 
-    //const query = "MIDI"
-    // const url = SERVER_URL + "/?name=" + query
-    
-    const url = "http://150.254.131.192:8080/inference"
-    console.log("sended to: " + url)
+  const tempo = document.getElementById("selectedTempo");
+  const tempoStr = tempo.options[tempo.selectedIndex].text;
 
-    const req = new XMLHttpRequest();
-    req.open("GET", url, true);
-    req.responseType = "blob";
-    req.onload = (event) => {
-      const blob = req.response;
-      console.log("Received: " + blob)
-      replaceTrack(blob)
-  };
+  const soundsRange = document.getElementById("selectedSoundsRange");
+  const soundsRangeStr = soundsRange.options[soundsRange.selectedIndex].text;
+
+  const volumeLevel = document.getElementById("selectedVolumeLevel");
+  const volumeLevelStr = volumeLevel.options[volumeLevel.selectedIndex].text;
   
+  const url = new URL("http://150.254.131.192:8080/inference")
+  url.searchParams.append('tempo', tempoStr)
+  url.searchParams.append('soundsRange', soundsRangeStr)
+  url.searchParams.append('volumeLevel', volumeLevelStr)
+
+  sendRequest(url.toString())
+}
+
+function sendRequest(url)
+{
+  var requestLog = document.getElementById('requestLog');
+  requestLog.innerHTML = "Request sended: " + "GET " + url
+  console.log("Request sended: " + "GET " + url)
+
+  const req = new XMLHttpRequest();
+  req.open("GET", url, true);
+  req.setRequestHeader('X-Requested-With', 'XMLHttpRequest'); 
+  req.setRequestHeader('Access-Control-Allow-Origin', '*');
+  req.responseType = "blob";
+  req.onload = (event) => {
+    const blob = req.response;
+    requestLog.innerHTML = "Received: " + blob
+    replaceTrack(blob)
+  }
+  req.onerror = (event) => {
+    if (req.responseType != "text")
+    {
+      requestLog.innerHTML = 'Network request failed'
+    }
+    else
+    {
+      requestLog.innerHTML = req.responseText
+    }
+  }
+  req.ontimeout = (event) => {
+    if (req.responseType != "text")
+    {
+      requestLog.innerHTML = 'Network request failed (timeout)'
+    }
+    else
+    {
+      requestLog.innerHTML = req.responseText
+    }
+  }
   req.send();
 }
 
