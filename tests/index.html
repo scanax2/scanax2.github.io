@@ -1,10 +1,22 @@
 <!doctype html>
 <html>
   <head>
+    <meta name="robots" content="noindex, nofollow" />
+
+    <!-- CDN for jQuery and select2 -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+            integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+            crossorigin="anonymous"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/js/select2.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=B612" rel="stylesheet" rel="stylesheet" media="none" onload="if (this.media != 'all') this.media='all';" /> <!-- this is a trick to load CSS asynchronously. -->
+    
     <script src="https://cdn.jsdelivr.net/combine/npm/tone@14.7.58,npm/@magenta/music@1.23.1/es6/core.js,npm/focus-visible@5,npm/html-midi-player@1.5.0"></script>
+    
     <script type="text/javaScript" src="./app.js"></script>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="playerStyle.css">
+
     <title>This is the title of the webpage!</title>
   </head>
   <body onload="main()">
@@ -73,6 +85,14 @@
       <br>
       <label id="requestLog"></label>
     </div>
+
+    <div id="beepboxEditorContainer">
+        <noscript>
+            Sorry, JummBox requires a JavaScript-enabled browser.
+        </noscript>
+    </div>
+
+    <script type="text/javascript" src="beepbox_editor.js"></script>
 
   </body>
 </html>
