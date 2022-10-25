@@ -88,10 +88,38 @@ function replaceTrack(file) {
   visualizer.src = url;
 }
 
+// https://github.com/jummbus/jummbox/blob/main/editor/main.ts
+function testUpdateMIDI() {
+  const editor = document.getElementById("beepboxEditorContainer");
+  const beppbox = document.getElementsByClassName("beepboxEditor");
+
+  console.log("OK")
+}
+
+function updateEditorTrack() {
+  const inject = document.getElementById("injectMIDI");
+
+  const inputElement = document.getElementById("input");
+  const fileList = inputElement.files;
+  const file = fileList[0];
+
+  // Now let's create a DataTransfer to get a FileList
+  const dataTransfer = new DataTransfer();
+  dataTransfer.items.add(file);
+
+  // inject.files = dataTransfer.files;
+  inject.files = dataTransfer.files;
+
+  const e = new Event('inject_MIDI')
+  inject.dispatchEvent(e);
+  console.log("Dispatched event");
+}
+
 function main() {
 
   const inputElement = document.getElementById("input");
   inputElement.addEventListener('change', updateTrackDisplay);
+  inputElement.addEventListener('change', updateEditorTrack);
 
   const selectedType = document.getElementById("selectedVisualizer");
   selectedType.addEventListener('change', updateVisualizerType);

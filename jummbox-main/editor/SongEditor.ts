@@ -304,6 +304,8 @@ class CustomChipCanvas {
 export class SongEditor {
     public prompt: Prompt | null = null;
 
+    private readonly _fileInput: HTMLInputElement = input({id: "injectMIDI", type: "file", accept: ".mid,.midi,audio/midi,audio/x-midi"});
+
     private readonly _keyboardLayout: KeyboardLayout = new KeyboardLayout(this._doc);
     private readonly _patternEditorPrev: PatternEditor = new PatternEditor(this._doc, false, -1);
     private readonly _patternEditor: PatternEditor = new PatternEditor(this._doc, true, 0);
@@ -749,6 +751,7 @@ export class SongEditor {
         div({ class: "play-pause-area" },
             this._volumeBarBox,
             div({ class: "playback-bar-controls" },
+                this._fileInput,
                 this._playButton,
                 this._pauseButton,
                 this._recordButton,
@@ -985,6 +988,9 @@ export class SongEditor {
         this._pauseButton.addEventListener("click", this.togglePlay);
         this._recordButton.addEventListener("click", this._toggleRecord);
         this._stopButton.addEventListener("click", this._toggleRecord);
+
+        this._fileInput.addEventListener("inject_MIDI", this._changeSong);
+
         // Start recording instead of opening context menu when control-clicking the record button on a Mac.
         this._recordButton.addEventListener("contextmenu", (event: MouseEvent) => {
             if (event.ctrlKey) {
@@ -1079,6 +1085,54 @@ export class SongEditor {
             layoutOption.setAttribute("hidden", "");
         }
     }
+    
+    private _changeSong = (e: Event): void => {
+        if (!(e.target instanceof HTMLInputElement)){
+            console.error("Not HTMLInputElement");
+            return;
+        }
+
+        const target = e.target as HTMLInputElement;
+        const files  = target.files;
+        if (files == null){
+            console.error("Injected Files are null");
+            return;
+        }
+        var file = files[0]
+
+        console.log(file);
+
+        var url = URL.createObjectURL(file)
+
+        console.log("Some works !");
+
+		if (url == null){
+			console.error("NULL URL");
+			return;
+		}
+
+        console.log(this._doc)
+
+		fetch(url)
+			.then(res => res.blob()) // Gets the response and returns it as a blob
+			.then(blob => {
+
+				if (!blob){
+					console.error("NULL Blob from URL");
+					return;
+				}
+
+				const reader: FileReader = new FileReader();
+				reader.addEventListener("load", (event: Event): void => {
+                    console.log(this._doc)
+
+					this.prompt = null;
+					this._doc.goBackToStart();
+					this._doc._parseMidiFile(<ArrayBuffer>reader.result);
+				});
+				reader.readAsArrayBuffer(blob);
+			});
+	}
 
     private _toggleDropdownMenu(dropdown: DropdownID, submenu: number = 0): void {
         let target: HTMLButtonElement = this._vibratoDropdown;
@@ -2530,6 +2584,8 @@ export class SongEditor {
                 // When a focused element is hidden, focus is transferred to the document, so let's refocus the editor instead to make sure we can still capture keyboard input.
                 this.refocusStage();
             }
+
+            this._fileInput.style.display = "none";
 
             this._playButton.style.display = "none";
             this._pauseButton.style.display = "none";

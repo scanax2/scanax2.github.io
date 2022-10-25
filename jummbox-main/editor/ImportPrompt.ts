@@ -11,7 +11,7 @@ import { removeDuplicatePatterns, ChangeSong, ChangeReplacePatterns } from "./ch
 import { AnalogousDrum, analogousDrumMap, MidiChunkType, MidiFileFormat, MidiEventType, MidiControlEventMessage, MidiMetaEventMessage, MidiRegisteredParameterNumberMSB, MidiRegisteredParameterNumberLSB, midiVolumeToVolumeMult, midiExpressionToVolumeMult } from "./Midi";
 import { ArrayBufferReader } from "./ArrayBufferReader";
 
-	const {button, p, div, h2, input} = HTML;
+const {button, p, div, h2, input} = HTML;
 
 export class ImportPrompt implements Prompt {
 		private readonly _fileInput: HTMLInputElement = input({type: "file", accept: ".json,application/json,.mid,.midi,audio/midi,audio/x-midi"});
