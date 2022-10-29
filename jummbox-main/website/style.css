@@ -1,0 +1,23 @@
+
+div.modelInput {
+    display: block;
+    margin: 1em;
+}
+
+div.modelInput select {
+    width: 8em;
+}
+
+div.modelInput tr>td {
+    padding-bottom: 0.75em;
+}
+
+div.modelInput tr>td>select {
+    margin-left: 0.75em;
+}
+
+div.modelInput button {
+    width: 16em;
+    height: 3em;
+    margin-bottom: 0.75em;
+}
