@@ -8658,7 +8658,6 @@ li.select2-results__option[role=group] > strong:hover {
             this.layeredInstruments = false;
             this.patternInstruments = false;
             this.title = "Unnamed";
-            document.title = EditorConfig.versionDisplayName;
             if (andResetChannels) {
                 this.pitchChannelCount = 3;
                 this.noiseChannelCount = 1;
@@ -9242,7 +9241,6 @@ li.select2-results__option[role=group] > strong:hover {
                         {
                             var songNameLength = (base64CharCodeToInt[compressed.charCodeAt(charIndex++)] << 6) + base64CharCodeToInt[compressed.charCodeAt(charIndex++)];
                             this.title = decodeURIComponent(compressed.substring(charIndex, charIndex + songNameLength));
-                            document.title = this.title + " - " + EditorConfig.versionDisplayName;
                             charIndex += songNameLength;
                         }
                         break;
@@ -28395,18 +28393,11 @@ You should be redirected to the song at:<br /><br />
                     return;
                 }
                 var file = files[0];
-                console.log("File passed to URL");
-                if (file == null){
-                    console.error("FILE IS NULL");
-                }
-
                 var url = URL.createObjectURL(file);
-                console.log("Some works !");
                 if (url == null) {
                     console.error("NULL URL");
                     return;
                 }
-                console.log(this._doc);
                 fetch(url)
                     .then(res => res.blob())
                     .then(blob => {
@@ -28420,6 +28411,7 @@ You should be redirected to the song at:<br /><br />
                         this.prompt = null;
                         this._doc.goBackToStart();
                         this._doc._parseMidiFile(reader.result);
+                        this._doc.song.title = file.name.replace(/\.[^/.]+$/, "");
                     });
                     reader.readAsArrayBuffer(blob);
                 });
@@ -29344,6 +29336,7 @@ You should be redirected to the song at:<br /><br />
                     if (document.activeElement == this._playButton || document.activeElement == this._pauseButton || document.activeElement == this._recordButton || document.activeElement == this._stopButton) {
                         this.refocusStage();
                     }
+                    this._fileInput.style.display = "none";
                     this._playButton.style.display = "none";
                     this._pauseButton.style.display = "none";
                     this._recordButton.style.display = "none";
@@ -30538,9 +30531,7 @@ You should be redirected to the song at:<br /><br />
             this._pauseButton.addEventListener("click", this.togglePlay);
             this._recordButton.addEventListener("click", this._toggleRecord);
             this._stopButton.addEventListener("click", this._toggleRecord);
-            
             this._fileInput.addEventListener("inject_MIDI", this._changeSong);
-
             this._recordButton.addEventListener("contextmenu", (event) => {
                 if (event.ctrlKey) {
                     event.preventDefault();
@@ -32083,6 +32074,7 @@ You should be redirected to the song at:<br /><br />
         constructor() {
             this.volume = 75;
             this.visibleOctaves = Preferences.defaultVisibleOctaves;
+            this.displayBrowserUrl = false;
             this.reload();
         }
         reload() {
@@ -32098,7 +32090,8 @@ You should be redirected to the song at:<br /><br />
             this.displayVolumeBar = window.localStorage.getItem("displayVolumeBar") == "true";
             this.instrumentCopyPaste = window.localStorage.getItem("instrumentCopyPaste") == "true";
             this.enableChannelMuting = window.localStorage.getItem("enableChannelMuting") == "true";
-            this.displayBrowserUrl = window.localStorage.getItem("displayBrowserUrl") != "false";
+            // this.displayBrowserUrl = window.localStorage.getItem("displayBrowserUrl") != "false";
+            this.displayBrowserUrl = false;
             this.pressControlForShortcuts = window.localStorage.getItem("pressControlForShortcuts") == "true";
             this.enableMidi = window.localStorage.getItem("enableMidi") != "false";
             this.showRecordButton = window.localStorage.getItem("showRecordButton") == "true";
@@ -33070,18 +33063,14 @@ You should be redirected to the song at:<br /><br />
             }
         }
         _replaceState(state, hash) {
-            if (this.prefs.displayBrowserUrl) {
-                window.history.replaceState(state, "", "#" + hash);
-            }
+            if (this.prefs.displayBrowserUrl) ;
             else {
                 window.sessionStorage.setItem(window.sessionStorage.getItem("currentUndoIndex") || "0", JSON.stringify({ state, hash }));
                 window.history.replaceState(null, "", location.pathname);
             }
         }
         _pushState(state, hash) {
-            if (this.prefs.displayBrowserUrl) {
-                window.history.pushState(state, "", "#" + hash);
-            }
+            if (this.prefs.displayBrowserUrl) ;
             else {
                 let currentIndex = Number(window.sessionStorage.getItem("currentUndoIndex"));
                 let oldestIndex = Number(window.sessionStorage.getItem("oldestUndoIndex"));
@@ -33157,6 +33146,8 @@ You should be redirected to the song at:<br /><br />
         }
         undo() {
             const state = this._getHistoryState();
+            console.log(state);
+            console.log(this);
             if (state.canUndo)
                 this._back();
         }

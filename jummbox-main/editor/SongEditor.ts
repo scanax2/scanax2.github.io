@@ -1100,18 +1100,12 @@ export class SongEditor {
         }
         var file = files[0]
 
-        console.log(file);
-
         var url = URL.createObjectURL(file)
-
-        console.log("Some works !");
 
 		if (url == null){
 			console.error("NULL URL");
 			return;
 		}
-
-        console.log(this._doc)
 
 		fetch(url)
 			.then(res => res.blob()) // Gets the response and returns it as a blob
@@ -1129,6 +1123,7 @@ export class SongEditor {
 					this.prompt = null;
 					this._doc.goBackToStart();
 					this._doc._parseMidiFile(<ArrayBuffer>reader.result);
+                    this._doc.song.title = file.name.replace(/\.[^/.]+$/, "");
 				});
 				reader.readAsArrayBuffer(blob);
 			});
