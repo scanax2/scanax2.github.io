@@ -17,11 +17,11 @@ const Sidebar = ({isOpen, toggle}) => {
       <Icon onClick={toggle}>
         <CloseIcon />
       </Icon>
-      <SidebarWrapper isOpen={isOpen} onClick={toggle}>
+      <SidebarWrapper isOpen={isOpen} onClick={toggle} fix={false}>
         <SidebarMenu>
-          <SidebarRouteSimple to="/generate_music" onClick={toggle}>Generate music</SidebarRouteSimple>
+          <SidebarRouteSimple to="/music-generator" onClick={toggle}>Generate music</SidebarRouteSimple>
           <SidebarRouteSimple to="/api" onClick={toggle}>API</SidebarRouteSimple>
-          <SidebarRouteSimple to="/about_us" onClick={toggle}>About</SidebarRouteSimple>
+          <SidebarRouteSimple to="/about-us" onClick={toggle}>About</SidebarRouteSimple>
         </SidebarMenu>
       </SidebarWrapper>
     </SidebarContainer>

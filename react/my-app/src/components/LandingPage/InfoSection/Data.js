@@ -1,9 +1,9 @@
-import img1 from '../../images/image1.svg'
-import img2 from '../../images/image1.svg'
+import img1 from '../../../images/image1.svg'
+import img2 from '../../../images/image1.svg'
 
 export const homeObjOne = {
     id: 'about',
-    lightBg: false,
+    lightBg: true,
     lightText: true,
     lightTextDesc: true,
     topLine: 'Premium generator',
@@ -22,7 +22,7 @@ export const homeObjOne = {
 }
 
 export const homeObjTwo = {
-    id: 'about',
+    id: 'turing-test',
     lightBg: false,
     lightText: true,
     lightTextDesc: true,

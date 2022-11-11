@@ -3,9 +3,9 @@ import { Link as LinkR } from 'react-router-dom'
 import { Link as LinkS } from 'react-scroll'
 import {FaBars, FaTimes} from 'react-icons/fa'
 
-
 export const Nav = styled.nav`
-    background: #000;
+    background: ${({scrollNav, isOpen, clear}) => (scrollNav || isOpen || clear ? '#000' : 'transparent')};
+    transition: background-color 0.5s ease;
     margin-top: -60px;
     height: 60px;
     display: flex;
@@ -35,14 +35,21 @@ export const NavbarContainer = styled.div`
 
 export const NavLogo = styled(LinkR)`
     color: #fff;
-    justify-self: flex-start;
     cursor: pointer;
     font-size: 1.5rem;
-    display: flex;
     align-items: center;
     margin-left: 80px;
     font-weight: bold;
     text-decoration: none;
+    text-align: center;
+
+    line-height: 60px;
+    display: inline-block;
+    position: absolute;
+    height: 100%;
+    width: 120px;
+
+    left: 0;
 
     &:hover {
         color: #00B2FF;
@@ -57,6 +64,10 @@ export const NavLinks = styled(LinkS)`
     padding: 0 1rem;
     height: 100%;
     cursor: pointer;
+
+    &.active {
+        border-bottom: 3px solid #00B2FF;
+    }
 `;
 
 export const HamburgerIcon = styled(FaBars)`
@@ -71,6 +82,11 @@ export const HamburgerIcon = styled(FaBars)`
 
     transition: 0.25s ease-out;
     opacity: ${({ isOpen }) => (isOpen ? '0' : '100%')};
+    z-index: ${({ isOpen }) => (isOpen ? 0 : 1)};
+
+    &:hover {
+        color: #00B2FF;
+    }
 `;
 
 export const CloseIcon = styled(FaTimes)`
@@ -85,14 +101,21 @@ export const CloseIcon = styled(FaTimes)`
 
     transition: 0.25s ease-in;
     opacity: ${({ isOpen }) => (isOpen ? '100%' : '0')};
+    z-index: ${({ isOpen }) => (isOpen ? 1 : 0)};
+
+    &:hover {
+        color: #00B2FF;
+    }
 `;
 
 export const NavMenu = styled.ul`
-    display: flex;
+    justify-self: center;
     align-items: center;
     list-style: none;
     text-align: center;
-    margin-right: -22px;
+    margin: auto;
+
+    display: ${({ clear }) => (clear ? 'none' : 'flex')};
 
     @media screen and (max-width: 768px){
         display: none;
@@ -104,12 +127,12 @@ export const NavItem = styled.li`
 `;
 
 export const NavBtn = styled.nav`
-    display: flex;
-    align-items: center;
-    
-    //@media screen and (max-width: 768px) {
-    //    display: none;
-    //}
+    position: absolute;
+    right: 15px;
+    top: 15%;
+    right: 45px;
+
+    display: ${({ clear }) => (clear ? 'none' : 'flex')};
 `;
 
 export const NavBtnLink = styled(LinkR)`
@@ -124,6 +147,7 @@ export const NavBtnLink = styled(LinkR)`
     cursor: pointer;
     transition: all 0.2s ease-in-out;
     text-decoration: none;
+    font-weight: bold;
 
     &:hover{
         transition: all 0.2s ease-in-out;

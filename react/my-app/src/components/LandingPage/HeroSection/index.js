@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import { Button } from '../ButtonElements'
+import { ButtonR } from '../../ButtonElements'
 import { 
     HeroBg, 
     HeroContainer, 
@@ -7,6 +7,7 @@ import {
     HeroContent,
     HeroH1,
     HeroH2,
+    HeroH3,
     HeroBtnWrapper,
     ArrowForward,
     ArrowRight
@@ -29,10 +30,11 @@ const HeroSection = () => {
             <HeroContent>
                 <HeroH2>Create your own</HeroH2>
                 <HeroH1>Royalty Free Music</HeroH1>
+                <HeroH3>With Game Music Generator</HeroH3>
                 <HeroBtnWrapper>
-                    <Button to='/generate_music' onMouseEnter={onHover} onMouseLeave={onHover} primary="true" dark="true">
+                    <ButtonR to='/music-generator' onMouseEnter={onHover} onMouseLeave={onHover} primary="true" dark="true">
                     Try now for FREE {hover ? <ArrowForward /> : <ArrowRight/>}
-                    </Button>
+                    </ButtonR>
                 </HeroBtnWrapper>
             </HeroContent>
         </HeroContainer>

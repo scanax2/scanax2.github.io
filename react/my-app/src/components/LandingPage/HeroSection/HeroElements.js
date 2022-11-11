@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import img from '../../images/LangingPageBackground.jpg'
+import img from '../../../images/LangingPageBackground.jpg'
 import {MdArrowForward, MdKeyboardArrowRight} from 'react-icons/md'
 
 export const HeroContainer = styled.div`
@@ -8,7 +8,7 @@ export const HeroContainer = styled.div`
     justify-content: center;
     align-items: center;
     padding: 0 30px;
-    height: 1020px;
+    height: 1080px;
     position: relative;
     z-index: 1;
 
@@ -52,6 +52,7 @@ export const HeroContent = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin-bottom: 100px;
 `;
 
 export const HeroH1 = styled.h1`
@@ -86,8 +87,25 @@ export const HeroH2 = styled.h2`
     }
 `;
 
+export const HeroH3 = styled.h2`
+    margin-top: 72px;
+    margin-bottom: 12px;
+    color: #fff;
+    font-size: min(3.2vw, 40px);
+    text-align: center;
+    max-width: 650px;
+
+    @media screen and (max-width: 768px) {
+        font-size: 26px;
+    }
+
+    @media screen and (max-width: 480px) {
+        font-size: 20px;
+    }
+`;
+
 export const HeroBtnWrapper = styled.div`
-    margin-top: 250px;
+    margin-top: 125px;
     margin-left: 8px;
     font-size: 20px;
     font-weight: bold;
