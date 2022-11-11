@@ -1,24 +1,25 @@
 /* Custom player style */
 #section3 {
-    background: rgb(202, 198, 202);
-    border: 2px solid rgb(185, 185, 185);
+    background: #000000;
+    border: 2px solid #000000;
     width: fit-content;
-    background: rgb(237, 231, 238);
+    background: #262626;
 }
 
 #section3 midi-player {
     display: block;
     margin: 4px;
     margin-bottom: 0;
-    width: auto;
+    width: 1200px;
 }
 
 #section3 midi-player::part(control-panel) {
-    background: rgb(202, 198, 202);
-    border: 2px solid rgb(185, 185, 185);
+    background: rgb(0, 0, 0);
+    border: 2px solid #000000;
     border-radius: 0px 0px 0 0;
     margin-left: -5px;
     margin-right: -5px;
+    width: 1200px;
 }
 
 #section3 midi-player::part(play-button) {
@@ -38,6 +39,7 @@
 
 #section3 midi-player::part(time) {
     font-family: monospace;
+    color: #FFFFFF
 }
 
 /* Custom visualizer style */
