@@ -7,7 +7,7 @@ import {
   GeneratorPlayer,
   BtnWrapper,
   DropdownWrapper,
-  GeneratorButtonWrapper
+  GeneratorSettingsWrapper
 } from './GeneratorElements'
 import GeneratorInputEnum from './GeneratorInputEnum'
 import { tempoEnum, sRangeEnum, volumeEnum, sentimentEnum } from './EnumParametersData'
@@ -41,12 +41,9 @@ const GeneratorSection = () => {
                   <GeneratorInputEnum {...sentimentEnum}/>
                 </GeneratorInputRow>
                 <GeneratorInputRow>
-                  <GeneratorButtonWrapper>
-                    <BtnWrapper>
+                  <GeneratorSettingsWrapper>
+                    <BtnWrapper background={'#000'}>
                       <Button onClick={toggleSampleState} primary={false} dark={false} fontBig={true}>{currentSampleState}</Button>
-                    </BtnWrapper>
-                    <BtnWrapper>
-                      <Button primary={false} dark={false} fontBig={true}>Generate music</Button>
                     </BtnWrapper>
                     <DropdownWrapper>
                       <GeneratorEnumDropdown {...durationDropdown}/>
@@ -54,7 +51,10 @@ const GeneratorSection = () => {
                     <DropdownWrapper>
                       <GeneratorEnumDropdown {...instrumentsDropdown}/>
                     </DropdownWrapper>
-                  </GeneratorButtonWrapper>
+                    <BtnWrapper background={'#32CD32'}>
+                      <Button primary={false} dark={false} fontBig={true}>Generate music</Button>
+                    </BtnWrapper>
+                  </GeneratorSettingsWrapper>
                 </GeneratorInputRow>
               </GeneratorInputWrapper>
             </GeneratorInputContainer>

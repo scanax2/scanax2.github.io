@@ -11,13 +11,21 @@ export const GeneratorContainer = styled.div`
     width: 100%;
     position: relative;
     z-index: 1;
+
+    @media screen and (max-width: 720px) {
+        height: 1800px;
+    }
 `;
 
 export const GeneratorInputContainer = styled.div`
-    background: #FFF;
+    background: #1F262A;
     height: 32.5%;
     width: 100%;
     z-index: 2;
+
+    @media screen and (max-width: 720px) {
+        height: 1100px;
+    }
 `;
 
 export const GeneratorInputWrapper = styled.div`
@@ -29,23 +37,40 @@ export const GeneratorInputRow = styled.div`
     display: flex;
     justify-content: space-around;
     align-items: center;
+
+    @media screen and (max-width: 720px) {
+        display: grid;
+        height: 500px;
+    }
 `;
 
-export const GeneratorButtonWrapper = styled.div`
-    margin-left: 175px;
+export const GeneratorSettingsWrapper = styled.div`
     width: 600px;
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 5px;
+
+    @media screen and (max-width: 720px) {
+        width: 80vw;
+        display: grid;
+        height: 250px;
+    }
 `;
 
 export const BtnWrapper = styled.div`
+    border-radius: 9px;
     margin: 10px;
     margin-top: 24px;
     font-size: 24px;
     width: 600px;
-    min-width: 250px;
+    min-width: 200px;
+    background: ${props => props.background};
+
+    @media screen and (max-width: 720px) {
+        width: 80vw;
+        display: grid;
+    }
 `;
 
 export const DropdownWrapper = styled.div`
@@ -54,6 +79,12 @@ export const DropdownWrapper = styled.div`
     width: 600px;
     display: flex;
     flex-direction: row;
+    min-width: 200px;
+
+    @media screen and (max-width: 720px) {
+        width: 80vw;
+        flex-direction: column;
+    }
 `;
 
 export const GeneratorPlayer = styled.div`

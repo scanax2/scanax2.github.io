@@ -1,15 +1,20 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-
+import {MdExpandMore} from 'react-icons/md'
 
 export const DropDownContainer = styled("div")`
   padding-top: 20px;
-  width: 200px;
+  width: 220px;
 `;
 
 export const DropDownHeader = styled("div")`
   cursor: pointer;
-  padding: 0.4em 2em 0.4em 1em;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.2s ease-in-out;
+  text-decoration: none;
+  padding: 0.4em 0.4em 0.4em 0.4em;
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.15);
   font-size: 20px;
   color: #fff;
@@ -48,4 +53,10 @@ export const ListItem = styled("li")`
   &:hover{
     background: #3faffa;
   }
+`;
+
+export const ArrowDown = styled(MdExpandMore)`
+    
+    font-size: 32px;
+    text-align: right;
 `;

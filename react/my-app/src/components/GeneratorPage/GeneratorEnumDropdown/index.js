@@ -4,7 +4,8 @@ import {
     DropDownHeader,
     DropDownListContainer,
     DropDownList,
-    ListItem
+    ListItem,
+    ArrowDown
 } from './GeneratorEnumDropdownElements'
 
 const GeneratorEnumDropdown = ({options}) => {
@@ -20,13 +21,22 @@ const GeneratorEnumDropdown = ({options}) => {
         console.log(selectedOption);
     };
 
+    const [hover, setHover] = useState(false)
+
+    const onHover = () => {
+        if (isOpen && hover==true){
+            toggling()
+        }
+        setHover(!hover)
+    }
+
     return (
-        <DropDownContainer>
+        <DropDownContainer onMouseEnter={onHover} onMouseLeave={onHover}>
             <DropDownHeader onClick={toggling}>
-                {selectedOption}
+                {selectedOption} <ArrowDown />
             </DropDownHeader>
             {isOpen && (
-            <DropDownListContainer>
+            <DropDownListContainer onMouseLeave={toggling}>
                 <DropDownList>
                 {options.map(option => (
                     <ListItem onClick={onOptionClicked(option)} key={Math.random()}>

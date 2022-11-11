@@ -48,7 +48,6 @@ export const ButtonR = styled(LinkR)`
 
 export const Button = styled.div`
     border-radius: 9px;
-    background: ${({primary}) => (primary ? '#00B2FF' : '#010606')};
     white-space: nowrap;
     padding: ${({big}) => (big ? '14px 48px' : '12px 30px')};
     color: ${({dark}) => (dark ? '#010606' : '#FFF')};
