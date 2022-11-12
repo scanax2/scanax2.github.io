@@ -46,8 +46,7 @@ export const GeneratorPlayerTab = styled.div`
 `;
 
 export const GeneratorPlayerWindow = styled.div`
-    //padding: 60px 180px;
     align-items: center;
-    height: 100%;
     width: 100%;
+    height: 100%;
 `;

@@ -21,6 +21,7 @@ const GeneratorInput = () => {
   const toggleSampleState = () => {
     console.log(currentSampleState)
     if (currentSampleState === "Add sample"){
+
       setCurrentState(prevState => "Back");
     }
     else{
@@ -41,9 +42,9 @@ const GeneratorInput = () => {
         </GeneratorInputRow>
         <GeneratorInputRow>
             <SmallBtnWrapper background={'#08080890'}>
-            <Button primary={false} dark={false} fontBig={false} onClick={() => {
-                    setTrigger(() => clearTrigger + 1);
-                }}>Clear x
+            <Button primary={false} dark={false} fontBig={false} 
+            onClick={() => {setTrigger(() => clearTrigger + 1);}}>
+              Clear x
             </Button>
             </SmallBtnWrapper>
         </GeneratorInputRow>

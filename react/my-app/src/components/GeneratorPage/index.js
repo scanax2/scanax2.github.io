@@ -9,16 +9,14 @@ import GeneratorPlayer from './GeneratorPlayer'
 
 const GeneratorSection = () => {
   return (
-    <>
-      <GeneratorContainer>
+    <GeneratorContainer>
           <GeneratorInputContainer>
             <GeneratorInput />
           </GeneratorInputContainer>
           <GeneratorPlayerContainer>
-            <GeneratorPlayer />
+            <GeneratorPlayer disabled={true}/>
           </GeneratorPlayerContainer>
-      </GeneratorContainer>
-    </>
+    </GeneratorContainer>
   )
 }
 

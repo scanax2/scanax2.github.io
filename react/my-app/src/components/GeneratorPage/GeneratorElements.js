@@ -1,13 +1,16 @@
 import styled from 'styled-components'
 
 export const GeneratorContainer = styled.div`
-    margin-top: 60px;
+    padding-top: 60px;
     background: #0c0c0c;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 920px;
+    position:absolute;
+    height: 100vh;
+    width: 100vw;
+    overflow: clip;
     width: 100%;
     position: relative;
     z-index: 1;
