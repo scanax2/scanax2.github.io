@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useRef} from 'react'
 import { 
   GeneratorContainer,
   GeneratorInputContainer,
@@ -7,7 +7,8 @@ import {
   GeneratorPlayer,
   BtnWrapper,
   DropdownWrapper,
-  GeneratorSettingsWrapper
+  GeneratorSettingsWrapper,
+  SmallBtnWrapper
 } from './GeneratorElements'
 import GeneratorInputEnum from './GeneratorInputEnum'
 import { tempoEnum, sRangeEnum, volumeEnum, sentimentEnum } from './EnumParametersData'
@@ -16,7 +17,8 @@ import { Button } from '../ButtonElements'
 import GeneratorEnumDropdown from './GeneratorEnumDropdown'
 
 const GeneratorSection = () => {
-
+  
+  // Sample add process
   const [currentSampleState, setCurrentState] = useState("Add sample")
 
   const toggleSampleState = () => {
@@ -29,16 +31,27 @@ const GeneratorSection = () => {
     }
   };
 
+  // Clear all presets
+  const [clearTrigger, setTrigger] = useState(0);
+
   return (
     <>
       <GeneratorContainer>
             <GeneratorInputContainer>
               <GeneratorInputWrapper>
                 <GeneratorInputRow>
-                  <GeneratorInputEnum {...tempoEnum}/>
-                  <GeneratorInputEnum {...sRangeEnum}/>
-                  <GeneratorInputEnum {...volumeEnum}/>
-                  <GeneratorInputEnum {...sentimentEnum}/>
+                  <GeneratorInputEnum {...tempoEnum} clearTrigger={clearTrigger}/>
+                  <GeneratorInputEnum {...sRangeEnum} clearTrigger={clearTrigger}/>
+                  <GeneratorInputEnum {...volumeEnum} clearTrigger={clearTrigger}/>
+                  <GeneratorInputEnum {...sentimentEnum} clearTrigger={clearTrigger}/>
+                </GeneratorInputRow>
+                <GeneratorInputRow>
+                  <SmallBtnWrapper background={'#08080890'}>
+                    <Button primary={false} dark={false} fontBig={false} onClick={() => {
+                        setTrigger(() => clearTrigger + 1);
+                      }}>Clear x
+                    </Button>
+                  </SmallBtnWrapper>
                 </GeneratorInputRow>
                 <GeneratorInputRow>
                   <GeneratorSettingsWrapper>

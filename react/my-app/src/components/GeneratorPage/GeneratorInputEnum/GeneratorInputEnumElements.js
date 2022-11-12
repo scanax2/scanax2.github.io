@@ -3,7 +3,7 @@ import styled from 'styled-components'
 export const ParameterContainer = styled.div`
     color: #000;
     width: 280px;
-    height: 150px;
+    height: 100px;
 `;
 
 export const ParameterTitle = styled.h2`
@@ -37,6 +37,7 @@ export const ParameterOption = styled.div`
     height: 50px;
     background: #000;
     font-weight: lighter;
+    transition: all 0.1s ease-out;
 
     background: ${({ selected, label }) => (selected === label ? '#00B2FF' : '#000')};
 

@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import {
     ParameterContainer,
     ParameterTitle,
@@ -6,8 +6,9 @@ import {
     ParameterOption
 } from './GeneratorInputEnumElements'
 
-const GeneratorInputEnum = ({title, options}) => {
+const GeneratorInputEnum = ({title, options, clearTrigger}) => {
 
+    // Switch state
     const enums = []
     const [currentState, setCurrentState] = useState("none")
 
@@ -18,6 +19,17 @@ const GeneratorInputEnum = ({title, options}) => {
     options.forEach((data) =>{
         enums.push(<ParameterOption selected={currentState} label={data} onClick={() => toggle(data)}>{data}</ParameterOption>)
     })
+
+    // Clear
+    useEffect(() => {
+        if (clearTrigger) {
+          clearAll();
+        }
+      }, [clearTrigger]);
+      
+    const clearAll = () => {
+        toggle('none')
+    }
 
     return (
         <ParameterContainer>

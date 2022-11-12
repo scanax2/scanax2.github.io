@@ -37,6 +37,7 @@ export const GeneratorInputRow = styled.div`
     display: flex;
     justify-content: space-around;
     align-items: center;
+    margin-bottom: 15px;
 
     @media screen and (max-width: 720px) {
         display: grid;
@@ -61,7 +62,6 @@ export const GeneratorSettingsWrapper = styled.div`
 export const BtnWrapper = styled.div`
     border-radius: 9px;
     margin: 10px;
-    margin-top: 24px;
     font-size: 24px;
     width: 600px;
     min-width: 200px;
@@ -73,9 +73,24 @@ export const BtnWrapper = styled.div`
     }
 `;
 
+export const SmallBtnWrapper = styled.div`
+    border-radius: 20px;
+    font-size: 24px;
+    width: 100px;
+    height: 30px;
+    min-width: 50px;
+    background: ${props => props.background};
+
+    @media screen and (max-width: 720px) {
+        width: 50vw;
+        display: grid;
+    }
+`;
+
 export const DropdownWrapper = styled.div`
-    margin: 10px;
-    margin-top: 5px;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: -25px;
     width: 600px;
     display: flex;
     flex-direction: row;
