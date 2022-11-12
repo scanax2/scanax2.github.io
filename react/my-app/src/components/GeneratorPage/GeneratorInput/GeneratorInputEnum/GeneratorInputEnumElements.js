@@ -42,6 +42,7 @@ export const ParameterOption = styled.div`
     background: ${({ selected, label }) => (selected === label ? '#00B2FF' : '#000')};
 
     &:hover {
+        transition: all 0s ease-out;
         background: ${({ selected, label }) => (selected === label ? '#00B2FF' : '#a3a3a3')};
     }
 `;
