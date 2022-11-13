@@ -68,6 +68,10 @@ export const NavLinks = styled(LinkS)`
     &.active {
         border-bottom: 3px solid #00B2FF;
     }
+
+    &:hover {
+        color: #00B2FF;
+    }
 `;
 
 export const HamburgerIcon = styled(FaBars)`

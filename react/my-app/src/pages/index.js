@@ -1,10 +1,12 @@
 import React, {useState} from 'react'
 import HeroSection from '../components/LandingPage/HeroSection'
-import InfoSection from '../components/LandingPage/InfoSection'
+
 import { homeObjOne, homeObjTwo } from '../components/LandingPage/InfoSection/Data'
 import Navbar from '../components/Navbar'
 import Sidebar from '../components/Sidebar'
 import Footer from '../components/LandingPage/Footer'
+import InfoSectionAbout from '../components/LandingPage/InfoSection/About'
+import InfoSectionTuringTest from '../components/LandingPage/InfoSection/TuringTest'
 
 const Home = () => {
   const [isOpen, setIsOpen] = useState(false)
@@ -18,8 +20,8 @@ const Home = () => {
       <Sidebar isOpen={isOpen} toggle={toggle}/>
       <Navbar isOpen={isOpen} toggle={toggle} clear={false}/>
       <HeroSection />
-      <InfoSection {...homeObjOne} />
-      <InfoSection {...homeObjTwo} />
+      <InfoSectionAbout {...homeObjOne} />
+      <InfoSectionTuringTest {...homeObjTwo} />
       <Footer />
     </>
   )

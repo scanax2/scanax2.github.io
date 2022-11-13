@@ -1,22 +1,22 @@
 import styled from 'styled-components'
 
 export const GeneratorInputWrapper = styled.div`
-padding-left: 120px;
-padding-right: 120px;
-margin-top: 50px;
-align-items: center;
+    padding-left: 120px;
+    padding-right: 120px;
+    margin-top: 50px;
+    align-items: center;
 `;
 
 export const GeneratorInputRow = styled.div`
-display: flex;
-justify-content: space-around;
-align-items: center;
-margin-bottom: 15px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-bottom: 15px;
 
-@media screen and (max-width: 720px) {
-    display: grid;
-    height: 500px;
-}
+    @media screen and (max-width: 720px) {
+        display: grid;
+        height: 500px;
+    }
 `;
 
 export const GeneratorSettingsWrapper = styled.div`
