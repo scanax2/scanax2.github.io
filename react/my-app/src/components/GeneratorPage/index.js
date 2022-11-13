@@ -6,10 +6,12 @@ import {
 } from './GeneratorElements'
 import GeneratorInput from './GeneratorInput'
 import GeneratorPlayer from './GeneratorPlayer'
+import GeneratorFileDialog from './GeneratorFileDialog'
 
 const GeneratorSection = () => {
   return (
     <GeneratorContainer>
+          <GeneratorFileDialog></GeneratorFileDialog>
           <GeneratorInputContainer>
             <GeneratorInput />
           </GeneratorInputContainer>

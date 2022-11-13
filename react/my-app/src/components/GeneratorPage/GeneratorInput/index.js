@@ -21,7 +21,6 @@ const GeneratorInput = () => {
   const toggleSampleState = () => {
     console.log(currentSampleState)
     if (currentSampleState === "Add sample"){
-
       setCurrentState(prevState => "Back");
     }
     else{

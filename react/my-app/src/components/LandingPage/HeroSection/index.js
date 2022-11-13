@@ -10,8 +10,10 @@ import {
     HeroH3,
     HeroBtnWrapper,
     ArrowForward,
-    ArrowRight
+    ArrowRight,
+    VideoBg
 } from './HeroElements'
+import video from '../../../videos/video.mp4'
 
 const HeroSection = () => {
 
@@ -25,7 +27,7 @@ const HeroSection = () => {
     <>
         <HeroContainer id="home">
             <HeroBg>
-                <ImageBg />
+                <VideoBg autoPlay loop muted src={video} type='video/mp4'/>
             </HeroBg>
             <HeroContent>
                 <HeroH2>Create your own</HeroH2>
