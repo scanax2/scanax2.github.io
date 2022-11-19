@@ -13,31 +13,21 @@ import { instrumentsDropdown, durationDropdown } from './EnumDropdownData'
 import { Button } from '../../ButtonElements'
 import GeneratorEnumDropdown from './GeneratorEnumDropdown'
 
-const GeneratorInput = () => {
-
-  // Sample add process
-  const [currentSampleState, setCurrentState] = useState("Add sample")
-
-  const toggleSampleState = () => {
-    console.log(currentSampleState)
-    if (currentSampleState === "Add sample"){
-      setCurrentState(prevState => "Back");
-    }
-    else{
-      setCurrentState(prevState => "Add sample");
-    }
-  };
+export const GeneratorInput = ({refs, toggleModal, sampleState, generateMusicClick}) => {
 
   // Clear all presets
   const [clearTrigger, setTrigger] = useState(0);
+
+  const generatorText = sampleState[0];
+  const sampleButtonText = sampleState[1];
   
   return (
     <GeneratorInputWrapper>
         <GeneratorInputRow>
-            <GeneratorInputEnum {...tempoEnum} clearTrigger={clearTrigger}/>
-            <GeneratorInputEnum {...sRangeEnum} clearTrigger={clearTrigger}/>
-            <GeneratorInputEnum {...volumeEnum} clearTrigger={clearTrigger}/>
-            <GeneratorInputEnum {...sentimentEnum} clearTrigger={clearTrigger}/>
+            <GeneratorInputEnum id={tempoEnum.id} {...tempoEnum} clearTrigger={clearTrigger}/>
+            <GeneratorInputEnum id={tempoEnum.id} {...sRangeEnum} clearTrigger={clearTrigger}/>
+            <GeneratorInputEnum id={volumeEnum.id} {...volumeEnum} clearTrigger={clearTrigger}/>
+            <GeneratorInputEnum id={sentimentEnum.id} {...sentimentEnum} clearTrigger={clearTrigger}/>
         </GeneratorInputRow>
         <GeneratorInputRow>
             <SmallBtnWrapper background={'#08080890'}>
@@ -50,7 +40,7 @@ const GeneratorInput = () => {
         <GeneratorInputRow>
             <GeneratorSettingsWrapper>
             <BtnWrapper background={'#000'}>
-                <Button onClick={toggleSampleState} primary={false} dark={false} fontBig={true}>{currentSampleState}</Button>
+                <Button onClick={toggleModal} primary={false} dark={false} fontBig={true}>{sampleButtonText}</Button>
             </BtnWrapper>
             <DropdownWrapper>
                 <GeneratorEnumDropdown {...durationDropdown}/>
@@ -59,7 +49,7 @@ const GeneratorInput = () => {
                 <GeneratorEnumDropdown {...instrumentsDropdown}/>
             </DropdownWrapper>
             <BtnWrapper background={'#32CD32'}>
-                <Button primary={false} dark={false} fontBig={true}>Generate music</Button>
+                <Button onClick={generateMusicClick} primary={false} dark={false} fontBig={true}>{generatorText}</Button>
             </BtnWrapper>
             </GeneratorSettingsWrapper>
         </GeneratorInputRow>

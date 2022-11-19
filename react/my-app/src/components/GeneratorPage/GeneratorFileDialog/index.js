@@ -1,21 +1,24 @@
 import React, {useState} from 'react'
 import Modal from "react-modal";
-import { ModalWrapper} from './GeneratorFileDialogElements'
+import { 
+    ModalContentWrapper,
+    ModalHeader,
+    ModalDescription,
+    FileInputWrapper,
+    ModalButtonWrapper
+} from './GeneratorFileDialogElements'
 import './modalStyle.css'
+import { Button } from '../../ButtonElements'
 
-const GeneratorFileDialog = () => {
+const GeneratorFileDialog = ({isOpen, toggleModal, toggleSampleState}) => {
 
-    const [isOpen, setIsOpen] = useState(false);
-
-    function toggleModal() {
-        console.log('try open')
-        setIsOpen(!isOpen);
-    }
+    const createSample = () => {
+        toggleModal()
+        toggleSampleState("ProcessingSample")
+    };
 
     return (
         <>
-            <button onClick={toggleModal}>Open modal</button>
-
             <Modal
                 isOpen={isOpen}
                 onRequestClose={toggleModal}
@@ -24,8 +27,16 @@ const GeneratorFileDialog = () => {
                 overlayClassName="myoverlay"
                 closeTimeoutMS={500}
             >
-                <div>My modal dialog.</div>
-                <button onClick={toggleModal}>Close modal</button>
+                <ModalContentWrapper>
+                    <ModalHeader>Add sample</ModalHeader>
+                    <ModalDescription>Sample will be used as start of your song, model will generate similar continuation. Choose file .mid or create your own sample.</ModalDescription>
+                    <FileInputWrapper>
+                        <input id="midi_file_input" class="file_input" type="file" accept=".mid,.midi"/>
+                    </FileInputWrapper>
+                    <ModalButtonWrapper>
+                        <Button dark={true} fontBig={true} onClick={createSample}>Create sample</Button>
+                    </ModalButtonWrapper>
+                </ModalContentWrapper>
             </Modal>
         </>
     )

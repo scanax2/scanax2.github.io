@@ -1,18 +1,42 @@
 import styled from 'styled-components'
 
-export const ModalWrapper = styled.div`
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
 
-    border: 1px solid #ccc;
+export const ModalContentWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+    align-items: center;
+    color: #fff;
+    width: fit-content;
+    height: fit-content;
+    max-width: 720px;
+`;
+
+export const ModalHeader = styled.h2`
+    align-items: center;
+    font-size: 32px;
+    color: #fff;
+`;
+
+export const ModalDescription = styled.h3`
+    padding-left: 16px;
+    padding-right: 16px;
+    margin-top: 32px;
+    margin-bottom: 32px;
+    display: flex;
+    text-align: left;
+    font-size: 18px;
+    font-weight: 100;
+    color: #fff;
+`; 
+
+export const FileInputWrapper = styled.div`
+    margin-bottom: 32px;
+`;
+
+export const ModalButtonWrapper = styled.div`
+    height: 48px;
+    width: 340px;
     background: #fff;
-    overflow: auto;
-    border-radius: 4px;
-    outline: none;
-    padding: 20px;
-    z-index: 4;
-    background-color: rgba(0, 0, 0, 0.75);
-    transition: opacity 500ms ease-in-out;
+    border-radius: 9px;
 `; 

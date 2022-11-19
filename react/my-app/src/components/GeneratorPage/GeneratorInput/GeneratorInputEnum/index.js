@@ -6,7 +6,7 @@ import {
     ParameterOption
 } from './GeneratorInputEnumElements'
 
-const GeneratorInputEnum = ({title, options, clearTrigger}) => {
+const GeneratorInputEnum = ({ref, id, title, options, clearTrigger}) => {
 
     // Switch state
     const enums = []
@@ -17,7 +17,7 @@ const GeneratorInputEnum = ({title, options, clearTrigger}) => {
     };
 
     options.forEach((data) =>{
-        enums.push(<ParameterOption selected={currentState} label={data} onClick={() => toggle(data)}>{data}</ParameterOption>)
+        enums.push(<ParameterOption id="enumOption" selected={currentState} label={data} onClick={() => toggle(data)}>{data}</ParameterOption>)
     })
 
     // Clear
@@ -32,7 +32,7 @@ const GeneratorInputEnum = ({title, options, clearTrigger}) => {
     }
 
     return (
-        <ParameterContainer>
+        <ParameterContainer id={id}>
             <ParameterTitle>{title}</ParameterTitle>
             <ParameterOptionsRow>{enums}</ParameterOptionsRow>
         </ParameterContainer>

@@ -4,8 +4,8 @@
     left: 50%;
     transform: translate(-50%, -50%);
   
-    border: 1px solid #ccc;
-    background: #fff;
+    border: 1px solid #fff;
+    background: #010101;
     overflow: auto;
     border-radius: 4px;
     outline: none;
@@ -34,4 +34,14 @@
   
   .ReactModal__Overlay--before-close {
     opacity: 0;
+  }
+
+  .file_input {
+    font-size: 18px;
+    display: inline-block;
+    cursor: pointer;
+
+    justify-items: left;
+    align-items: left;
+
   }
