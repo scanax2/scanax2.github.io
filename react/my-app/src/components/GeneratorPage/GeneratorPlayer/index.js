@@ -29,7 +29,7 @@ const GeneratorPlayer = ({disabled}) => {
         </GeneratorPlayerTabsWrapper>
       </GeneratorPlayerToolbar>
       <GeneratorPlayerWindow>
-        <MidiPlayer disabled={disabled} />
+        <MidiPlayer disabled={disabled} hidden={'view' != currentState} />
       </GeneratorPlayerWindow>
     </GeneratorPlayerWrapper>
   )

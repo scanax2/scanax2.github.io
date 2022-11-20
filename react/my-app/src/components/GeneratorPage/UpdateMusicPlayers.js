@@ -1,4 +1,12 @@
 
+export function clearTrackDisplay() {
+    const player = document.getElementById("myPlayer");
+    const visualizer = document.getElementById("myVisualizer");
+  
+    player.src = "";
+    visualizer.src = "";
+}
+
 export function updateTrackDisplay() {
 
     const inputElement = document.getElementById("midi_file_input");

@@ -9,12 +9,14 @@ import {
 } from './GeneratorFileDialogElements'
 import './modalStyle.css'
 import { Button } from '../../ButtonElements'
+import { updateTrackDisplay } from '../UpdateMusicPlayers';
 
 const GeneratorFileDialog = ({isOpen, toggleModal, toggleSampleState}) => {
 
     const createSample = () => {
         toggleModal()
         toggleSampleState("ProcessingSample")
+        updateTrackDisplay()
     };
 
     return (

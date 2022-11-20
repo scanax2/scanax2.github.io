@@ -1,17 +1,17 @@
 import React from 'react'
 import './PlayerStyle.css'
 import 'html-midi-player'
+import { PlayerWrapper } from './MidiPlayerElements'
 
-const MidiPlayer = ({disabled}) => {
+const MidiPlayer = ({disabled, hidden}) => {
 
   return (
-    <section id="section3">
-      <midi-player id="myPlayer" src="https://cdn.jsdelivr.net/gh/cifkao/html-midi-player@2b12128/twinkle_twinkle.mid"
-                    sound-font="https://storage.googleapis.com/magentadata/js/soundfonts/sgm_plus" visualizer="#myVisualizer" >
+    <PlayerWrapper id="section3" hidden={hidden}>
+      <midi-player id="myPlayer" sound-font="https://storage.googleapis.com/magentadata/js/soundfonts/sgm_plus" visualizer="#myVisualizer">
       </midi-player>
-      <midi-visualizer type="piano-roll" id="myVisualizer" className="testVisualizer" src="https://cdn.jsdelivr.net/gh/cifkao/html-midi-player@2b12128/twinkle_twinkle.mid">
+      <midi-visualizer type="piano-roll" id="myVisualizer">
       </midi-visualizer>
-    </section>
+    </PlayerWrapper>
   )
 }
 

@@ -8,6 +8,7 @@ import GeneratorInput from './GeneratorInput'
 import GeneratorPlayer from './GeneratorPlayer'
 import GeneratorFileDialog from './GeneratorFileDialog'
 import { getMIDIRequest } from './RequestsManager'
+import { clearTrackDisplay } from './UpdateMusicPlayers'
 
 
 const GeneratorFSM = {
@@ -23,8 +24,9 @@ const GeneratorSection = () => {
   const addSampleClick = () => {
       if (currentSampleState == 'SampleAdded'){
         toggleSampleState("RawInput")
-      }
+      } // exit from sample
       else if (currentSampleState == "ProcessingSample"){
+        clearTrackDisplay()
         toggleSampleState("RawInput")
       }
       else if (currentSampleState == "RawInput"){
@@ -55,7 +57,7 @@ const GeneratorSection = () => {
             <GeneratorInput toggleModal={addSampleClick} sampleState={GeneratorFSM[currentSampleState]} generateMusicClick={generateMusicClick}/>
           </GeneratorInputContainer>
           <GeneratorPlayerContainer>
-            <GeneratorPlayer disabled={true}/>
+            <GeneratorPlayer disabled={currentSampleState != "ProcessingSample"}/>
           </GeneratorPlayerContainer>
     </GeneratorContainer>
   )
