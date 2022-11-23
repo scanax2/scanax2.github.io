@@ -33,7 +33,7 @@ const GeneratorFileDialog = ({isOpen, toggleModal, toggleSampleState}) => {
                     <ModalHeader>Add sample</ModalHeader>
                     <ModalDescription>Sample will be used as start of your song, model will generate similar continuation. Choose file .mid or create your own sample.</ModalDescription>
                     <FileInputWrapper>
-                        <input id="midi_file_input" class="file_input" type="file" accept=".mid,.midi"/>
+                        <input id="midi_file_input" type="file" accept=".mid,.midi"/>
                     </FileInputWrapper>
                     <ModalButtonWrapper>
                         <Button dark={true} fontBig={true} onClick={createSample}>Create sample</Button>

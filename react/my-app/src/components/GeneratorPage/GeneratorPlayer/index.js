@@ -7,6 +7,8 @@ import {
   GeneratorPlayerTab
 } from './GeneratorPlayerElements'
 import MidiPlayer from './MidiPlayer'
+import MidiEditor from './MidiEditor'
+
 
 
 const GeneratorPlayer = ({disabled}) => {
@@ -30,6 +32,7 @@ const GeneratorPlayer = ({disabled}) => {
       </GeneratorPlayerToolbar>
       <GeneratorPlayerWindow>
         <MidiPlayer disabled={disabled} hidden={'view' != currentState} />
+        <MidiEditor disabled={disabled} hidden={'edit' != currentState} />
       </GeneratorPlayerWindow>
     </GeneratorPlayerWrapper>
   )

@@ -1,5 +1,5 @@
 import styled from "styled-components";
 
-export const PlayerWrapper = styled.section`
+export const EditorWrapper = styled.div`
     visibility: ${({isHidden}) => (isHidden ? 'hidden' : 'visible')};
 `;
