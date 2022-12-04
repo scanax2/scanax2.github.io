@@ -44,7 +44,6 @@
 #section3 midi-visualizer .piano-roll-visualizer {
     margin: 4px;
     margin-top: 0;
-    overflow: auto;
     width: fit-content;
     padding: 5px;
 }

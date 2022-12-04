@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect, componentDidMount, componentWillUnmount} from 'react'
 import { 
   GeneratorPlayerTabsWrapper,
   GeneratorPlayerToolbar,
@@ -8,7 +8,7 @@ import {
 } from './GeneratorPlayerElements'
 import MidiPlayer from './MidiPlayer'
 import MidiEditor from './MidiEditor'
-
+import { pauseAllTracks } from '../UpdateMusicPlayers'
 
 
 const GeneratorPlayer = ({disabled}) => {
@@ -21,6 +21,19 @@ const GeneratorPlayer = ({disabled}) => {
       console.log(selected);
       setCurrentState(prevState => selected);
   };
+
+  useEffect(() => {
+    const test = (event) => {
+      // NOTE: This message isn't used in modern browsers, but is required
+      const message = 'Sure you want to leave?';
+      console.log(message)
+    };
+
+    console.log("some magic")
+    return () => {
+      pauseAllTracks()
+    }
+  }, [])
 
   return (
     <GeneratorPlayerWrapper style={disabled ? {pointerEvents: "none", opacity: "0.4"} : {}}>

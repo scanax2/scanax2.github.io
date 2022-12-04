@@ -1,5 +1,5 @@
 import { tempoEnum, sRangeEnum, volumeEnum, sentimentEnum } from './GeneratorInput/EnumParametersData'
-import { updateTrackDisplay } from './UpdateMusicPlayers'
+import { submitted_sample } from './UpdateMusicPlayers'
 
 const machineAddress = "http://150.254.131.192:8080/"
 
@@ -49,7 +49,11 @@ export function getMIDIRequest() {
     url.searchParams.append('tempo', tempo)
     url.searchParams.append('soundsRange', soundsRange)
     url.searchParams.append('volumeLevel', volume)
-  
+    
+    if (submitted_sample != null){
+        url.searchParams.append('sample', submitted_sample)
+    }
+
     sendRequest(url.toString())
 }
 
@@ -66,6 +70,9 @@ export function rawGetMIDIRequest() {
         urlSentiment = positive_sentiment
     }
     const url = new URL("http://150.254.131.192:8080/" + urlSentiment)
+    if (submitted_sample != null){
+        url.searchParams.append('sample', submitted_sample)
+    }
     sendRequest(url)
 }
 
