@@ -6815,7 +6815,7 @@ export class Synth {
         this.audioCtx.resume();
     }
 
-    private deactivateAudio(): void {
+    public deactivateAudio(): void {
         if (this.audioCtx != null && this.scriptNode != null) {
             this.scriptNode.disconnect(this.audioCtx.destination);
             this.scriptNode = null;
@@ -7061,6 +7061,13 @@ export class Synth {
                 outputDataR[i] = 0.0;
             }
         }
+        
+        // Off music on page switch 
+        const tmp_splitted = window.location.href.split('/');
+        const tmp_last = tmp_splitted[tmp_splitted.length - 1];
+        if (tmp_last != "music-generator"){
+            this.deactivateAudio();
+        }
 
         if (!this.isPlayingSong && performance.now() >= this.liveInputEndTime) {
             this.deactivateAudio();
@@ -7131,7 +7138,6 @@ export class Synth {
 
         let bufferIndex: number = 0;
         while (bufferIndex < outputBufferLength && !ended) {
-
             this.nextBar = this.getNextBar();
             if (this.nextBar >= song.barCount) this.nextBar = null;
 

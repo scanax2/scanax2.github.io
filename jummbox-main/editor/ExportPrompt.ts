@@ -35,7 +35,7 @@ function save(blob: Blob, name: string): void {
     } else {
         const url: string = URL.createObjectURL(blob);
         setTimeout(function () { URL.revokeObjectURL(url); }, 60000);
-        if (!window.open(url, "_blank")) window.location.href = url;
+        // if (!window.open(url, "_blank")) window.location.href = url;
     }
 }
 

@@ -23,15 +23,12 @@ const GeneratorPlayer = ({disabled}) => {
   };
 
   useEffect(() => {
-    const test = (event) => {
-      // NOTE: This message isn't used in modern browsers, but is required
-      const message = 'Sure you want to leave?';
-      console.log(message)
+    console.log("setted action")
+    window.onbeforeunload = function(){
+      console.log("WTF");
     };
-
-    console.log("some magic")
     return () => {
-      pauseAllTracks()
+      
     }
   }, [])
 

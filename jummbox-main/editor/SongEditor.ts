@@ -305,6 +305,7 @@ export class SongEditor {
     public prompt: Prompt | null = null;
 
     private readonly _fileInput: HTMLInputElement = input({id: "injectMIDI", type: "file", accept: ".mid,.midi,audio/midi,audio/x-midi"});
+    private readonly _pausePlayer: HTMLElement = div({id: "pausePlayer"});
 
     private readonly _keyboardLayout: KeyboardLayout = new KeyboardLayout(this._doc);
     private readonly _patternEditorPrev: PatternEditor = new PatternEditor(this._doc, false, -1);
@@ -751,6 +752,7 @@ export class SongEditor {
         div({ class: "play-pause-area" },
             this._volumeBarBox,
             div({ class: "playback-bar-controls" },
+                this._pausePlayer,
                 this._fileInput,
                 this._playButton,
                 this._pauseButton,
@@ -990,6 +992,7 @@ export class SongEditor {
         this._stopButton.addEventListener("click", this._toggleRecord);
 
         this._fileInput.addEventListener("inject_MIDI", this._changeSong);
+        this._pausePlayer.addEventListener("deactivateEditor", this._deactivate);
 
         // Start recording instead of opening context menu when control-clicking the record button on a Mac.
         this._recordButton.addEventListener("contextmenu", (event: MouseEvent) => {
@@ -1084,6 +1087,16 @@ export class SongEditor {
             layoutOption.disabled = true;
             layoutOption.setAttribute("hidden", "");
         }
+    }
+
+    private _deactivate = (e: Event): void => {
+        if (!(e.target instanceof HTMLElement)){
+            console.error("Not HTMLInputElement");
+            return;
+        }
+
+        this._doc.performance.pause();
+        this.outVolumeHistoricCap = 0;
     }
     
     private _changeSong = (e: Event): void => {
@@ -2581,6 +2594,7 @@ export class SongEditor {
             }
 
             this._fileInput.style.display = "none";
+            this._pausePlayer.style.display = "none";
 
             this._playButton.style.display = "none";
             this._pauseButton.style.display = "none";
@@ -2943,7 +2957,7 @@ export class SongEditor {
                     this._doc.prefs.showScrollBar = true;
                     this._doc.prefs.alwaysFineNoteVol = false;
                     this._doc.prefs.enableChannelMuting = true;
-                    this._doc.prefs.displayBrowserUrl = true;
+                    this._doc.prefs.displayBrowserUrl = false;
                     this._doc.prefs.displayVolumeBar = true;
                     this._doc.prefs.layout = "wide";
                     this._doc.prefs.visibleOctaves = 5;

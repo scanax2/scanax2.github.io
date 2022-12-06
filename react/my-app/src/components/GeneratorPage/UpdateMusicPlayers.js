@@ -40,6 +40,18 @@ export function updateEditorTrack() {
     console.log("Dispatched event");
 }
 
+export function deactivateEditor() {
+    const pause_element = document.getElementById("pausePlayer");
+    if (pause_element == null){
+        console.log("Null pause element")
+        return
+    }
+    console.log("Injected", pause_element)
+    const e = new Event('deactivateEditor')
+    pause_element.dispatchEvent(e);
+    console.log("Dispatched event");
+}
+
 export function replaceTrackInViewComponent(file) {
     const url = URL.createObjectURL(file);
   
@@ -69,12 +81,21 @@ export function submitSample() {
     var reader = new FileReader();
     reader.onload = function() {
 
-        var arrayBuffer = this.result,
-        array = new Uint8Array(arrayBuffer),
-        binaryString = String.fromCharCode.apply(null, array);
-        submitted_sample = binaryString
+        var arrayBuffer = this.result;
+        var encodedString = _arrayBufferToBase64(arrayBuffer)
+        submitted_sample = encodedString
     }
     reader.readAsArrayBuffer(current_sample);
+}
+
+function _arrayBufferToBase64( buffer ) {
+    var binary = '';
+    var bytes = new Uint8Array( buffer );
+    var len = bytes.byteLength;
+    for (var i = 0; i < len; i++) {
+        binary += String.fromCharCode( bytes[ i ] );
+    }
+    return window.btoa( binary );
 }
 
 export function removeSample() {

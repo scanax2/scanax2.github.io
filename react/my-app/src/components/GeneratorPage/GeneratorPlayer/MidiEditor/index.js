@@ -3,12 +3,13 @@ import 'html-midi-player'
 import { EditorWrapper } from './MidiEditorElements'
 import { Helmet } from 'react-helmet'
 import './EditorStyles.css'
-
+import { deactivateEditor } from '../../UpdateMusicPlayers'
 
 const MidiEditor = ({disabled, hidden}) => {
   return (
     <EditorWrapper hidden={hidden}>
         <div id="beepboxEditorContainer">
+          <button onClick={deactivateEditor}>TEST</button>
         </div>
         <Helmet>
            <script type="text/javascript" src="./beepbox_editor.min.js"></script>
