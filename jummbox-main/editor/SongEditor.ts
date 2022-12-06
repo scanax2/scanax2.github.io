@@ -991,7 +991,13 @@ export class SongEditor {
         this._recordButton.addEventListener("click", this._toggleRecord);
         this._stopButton.addEventListener("click", this._toggleRecord);
 
+        // !!! Important !!!
         this._fileInput.addEventListener("inject_MIDI", this._changeSong);
+        this._fileInput.addEventListener("clear_track", this._clearSong);
+        this._fileInput.addEventListener("fetch_track", this._fetchSong);
+        // !!! Important !!!
+
+
         this._pausePlayer.addEventListener("deactivateEditor", this._deactivate);
 
         // Start recording instead of opening context menu when control-clicking the record button on a Mac.
@@ -1140,6 +1146,36 @@ export class SongEditor {
 				});
 				reader.readAsArrayBuffer(blob);
 			});
+	}
+
+    private _clearSong = (e: Event): void => {
+        if (!(e.target instanceof HTMLInputElement)){
+            console.error("Not HTMLInputElement");
+            return;
+        }
+
+        this._doc.goBackToStart();
+        this._doc.song.restoreLimiterDefaults();
+        for (const channel of this._doc.song.channels) {
+            channel.muted = false;
+            channel.name = "";
+        }
+        this._doc.record(new ChangeSong(this._doc, ""), false, true);
+	}
+
+    private _fetchSong = (e: Event): void => {
+        if (!(e.target instanceof HTMLInputElement)){
+            console.error("Not HTMLInputElement");
+            return;
+        }
+
+        this._doc.goBackToStart();
+        this._doc.song.restoreLimiterDefaults();
+        for (const channel of this._doc.song.channels) {
+            channel.muted = false;
+            channel.name = "";
+        }
+        this._doc.record(new ChangeSong(this._doc, ""), false, true);
 	}
 
     private _toggleDropdownMenu(dropdown: DropdownID, submenu: number = 0): void {

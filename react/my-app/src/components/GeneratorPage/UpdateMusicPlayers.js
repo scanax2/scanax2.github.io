@@ -4,11 +4,12 @@ export var submitted_sample;
 var current_sample;
 
 export function clearTrackDisplay() {
+    /* TMP player turned off
     const player = document.getElementById("myPlayer");
     const visualizer = document.getElementById("myVisualizer");
   
     player.src = "";
-    visualizer.src = "";
+    visualizer.src = "";*/
 }
 
 export function updateTrackDisplay() {
@@ -53,27 +54,22 @@ export function deactivateEditor() {
 }
 
 export function replaceTrackInViewComponent(file) {
+    /* TMP player turned off
     const url = URL.createObjectURL(file);
-  
+    
     const player = document.getElementById("myPlayer");
     const visualizer = document.getElementById("myVisualizer");
   
     player.src = url;
-    visualizer.src = url;
-}
-
-export function pauseAllTracks() {
-    /*const player = document.getElementById("myPlayer");
-    const visualizer = document.getElementById("myVisualizer");
-  
-    player.src = url;
     visualizer.src = url;*/
-    console.log("all paused");
-    // document.querySelectorAll('audio').forEach(el => el.pause());
 }
 
 export function clearAllTracks() {
-    
+    deactivateEditor()
+    const inject = document.getElementById("injectMIDI");
+    const e = new Event('clear_track')
+    inject.dispatchEvent(e);
+    console.log("Dispatched event");
 }
 
 // Sample

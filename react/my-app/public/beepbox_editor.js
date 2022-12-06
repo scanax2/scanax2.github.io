@@ -12159,12 +12159,9 @@ li.select2-results__option[role=group] > strong:hover {
                 }
                 const tmp_splitted = window.location.href.split('/');
                 const tmp_last = tmp_splitted[tmp_splitted.length - 1];
-                console.log("test: " + tmp_last);
                 if (tmp_last != "music-generator") {
-                    console.log("Other page");
                     this.deactivateAudio();
                 }
-                console.log("The URL of this page is: " + window.location.href);
                 if (!this.isPlayingSong && performance.now() >= this.liveInputEndTime) {
                     this.deactivateAudio();
                 }
@@ -28428,6 +28425,19 @@ You should be redirected to the song at:<br /><br />
                     reader.readAsArrayBuffer(blob);
                 });
             };
+            this._clearSong = (e) => {
+                if (!(e.target instanceof HTMLInputElement)) {
+                    console.error("Not HTMLInputElement");
+                    return;
+                }
+                this._doc.goBackToStart();
+                this._doc.song.restoreLimiterDefaults();
+                for (const channel of this._doc.song.channels) {
+                    channel.muted = false;
+                    channel.name = "";
+                }
+                this._doc.record(new ChangeSong(this._doc, ""), false, true);
+            };
             this.refocusStage = () => {
                 this.mainLayer.focus({ preventScroll: true });
             };
@@ -30545,6 +30555,7 @@ You should be redirected to the song at:<br /><br />
             this._recordButton.addEventListener("click", this._toggleRecord);
             this._stopButton.addEventListener("click", this._toggleRecord);
             this._fileInput.addEventListener("inject_MIDI", this._changeSong);
+            this._fileInput.addEventListener("clear_track", this._clearSong);
             this._pausePlayer.addEventListener("deactivateEditor", this._deactivate);
             this._recordButton.addEventListener("contextmenu", (event) => {
                 if (event.ctrlKey) {

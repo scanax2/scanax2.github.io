@@ -8,7 +8,7 @@ import GeneratorInput from './GeneratorInput'
 import GeneratorPlayer from './GeneratorPlayer'
 import GeneratorFileDialog from './GeneratorFileDialog'
 import { getMIDIRequest } from './RequestsManager'
-import { clearTrackDisplay, removeSample, submitSample } from './UpdateMusicPlayers'
+import { deactivateEditor, removeSample, submitSample } from './UpdateMusicPlayers'
 
 
 const GeneratorFSM = {
@@ -22,13 +22,15 @@ const GeneratorSection = () => {
   const [isFileDialogOpen, setIsOpen] = useState(false);
 
   const addSampleClick = () => {
+      // if sample added, clear
       if (currentSampleState == 'SampleAdded'){
         toggleSampleState("RawInput")
         removeSample()
-      } // exit from sample
+      }
+      // Back
       else if (currentSampleState == "ProcessingSample"){
-        clearTrackDisplay()
         toggleSampleState("RawInput")
+        removeSample()
       }
       else if (currentSampleState == "RawInput"){
         setIsOpen(!isFileDialogOpen);
@@ -46,6 +48,7 @@ const GeneratorSection = () => {
     if (currentSampleState == "ProcessingSample"){
       setCurrentState(prevState => 'SampleAdded');
       submitSample()
+      deactivateEditor()
     }
     else{
       getMIDIRequest()
