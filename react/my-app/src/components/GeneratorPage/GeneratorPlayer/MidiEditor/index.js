@@ -9,7 +9,6 @@ const MidiEditor = ({disabled, hidden}) => {
   return (
     <EditorWrapper hidden={hidden}>
         <div id="beepboxEditorContainer">
-          <button onClick={deactivateEditor}>TEST</button>
         </div>
         <Helmet>
            <script type="text/javascript" src="./beepbox_editor.min.js"></script>

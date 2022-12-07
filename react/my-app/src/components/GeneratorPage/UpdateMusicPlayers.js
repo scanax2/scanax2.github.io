@@ -31,14 +31,18 @@ export function updateEditorTrack() {
     const fileList = inputElement.files;
     const file = fileList[0];
   
+    updateEditorWithFile(inject, file)
+}
+
+export function updateEditorWithFile(component, file) {
     const dataTransfer = new DataTransfer();
     dataTransfer.items.add(file);
 
-    inject.files = dataTransfer.files;
+    component.files = dataTransfer.files;
   
     const e = new Event('inject_MIDI')
-    inject.dispatchEvent(e);
-    console.log("Dispatched event");
+    component.dispatchEvent(e);
+    console.log("Dispatched inject_MIDI");
 }
 
 export function deactivateEditor() {
@@ -50,7 +54,7 @@ export function deactivateEditor() {
     console.log("Injected", pause_element)
     const e = new Event('deactivateEditor')
     pause_element.dispatchEvent(e);
-    console.log("Dispatched event");
+    console.log("Dispatched deactivateEditor");
 }
 
 export function replaceTrackInViewComponent(file) {
@@ -69,19 +73,27 @@ export function clearAllTracks() {
     const inject = document.getElementById("injectMIDI");
     const e = new Event('clear_track')
     inject.dispatchEvent(e);
-    console.log("Dispatched event");
+    console.log("Dispatched clear_track");
 }
 
 // Sample
-export function submitSample() {
+export function submitRawSample() {
+    if (!(current_sample instanceof Blob)){
+        console.log("Sample isn't a blob")
+        return
+    }
+
     var reader = new FileReader();
     reader.onload = function() {
-
         var arrayBuffer = this.result;
         var encodedString = _arrayBufferToBase64(arrayBuffer)
         submitted_sample = encodedString
     }
     reader.readAsArrayBuffer(current_sample);
+}
+
+export function submitSample() {
+    refreshSubmittedTrack()
 }
 
 function _arrayBufferToBase64( buffer ) {
@@ -92,6 +104,45 @@ function _arrayBufferToBase64( buffer ) {
         binary += String.fromCharCode( bytes[ i ] );
     }
     return window.btoa( binary );
+}
+
+function converBase64toBlob(content, contentType) {
+    contentType = contentType || '';
+    var sliceSize = 512;
+    var byteCharacters = window.atob(content); //method which converts base64 to binary
+    var byteArrays = [
+    ];
+    for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+      var slice = byteCharacters.slice(offset, offset + sliceSize);
+      var byteNumbers = new Array(slice.length);
+      for (var i = 0; i < slice.length; i++) {
+        byteNumbers[i] = slice.charCodeAt(i);
+      }
+      var byteArray = new Uint8Array(byteNumbers);
+      byteArrays.push(byteArray);
+    }
+    var blob = new Blob(byteArrays, {
+      type: contentType
+    }); //statement which creates the blob
+    return blob;
+}
+
+export async function refreshSubmittedTrack() {
+    const inject = document.getElementById("injectMIDI");
+    const e = new Event('fetch_track')
+    inject.dispatchEvent(e);
+    console.log("Dispatched fetch_track");
+
+    const track_base64 = inject.getAttribute('track_base64')
+
+    deactivateEditor()
+
+    submitted_sample = track_base64
+
+    // How to insert
+    /*const file = converBase64toBlob(submitted_sample, '')
+    var fileF = new File([file], "name");
+    updateEditorWithFile(inject, fileF)*/
 }
 
 export function removeSample() {

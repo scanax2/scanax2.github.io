@@ -68,7 +68,7 @@ export class ExportPrompt implements Prompt {
         this._outputProgressBar,
         this._outputProgressLabel,
     );
-    private static readonly midiChipInstruments: number[] = [
+    public static readonly midiChipInstruments: number[] = [
         0x4A, // rounded -> recorder
         0x47, // triangle -> clarinet
         0x50, // square -> square wave

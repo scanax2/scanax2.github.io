@@ -28438,6 +28438,16 @@ You should be redirected to the song at:<br /><br />
                 }
                 this._doc.record(new ChangeSong(this._doc, ""), false, true);
             };
+            this._fetchSong = (e) => {
+                console.log("!!! fetch");
+                if (!(e.target instanceof HTMLInputElement)) {
+                    console.error("Not HTMLInputElement");
+                    return;
+                }
+                const exportedBuffer = this._exportCurrentToMidi(false, false, 1);
+                const base64 = SongEditor._arrayBufferToBase64(exportedBuffer);
+                e.target.setAttribute("track_base64", base64);
+            };
             this.refocusStage = () => {
                 this.mainLayer.focus({ preventScroll: true });
             };
@@ -30556,6 +30566,7 @@ You should be redirected to the song at:<br /><br />
             this._stopButton.addEventListener("click", this._toggleRecord);
             this._fileInput.addEventListener("inject_MIDI", this._changeSong);
             this._fileInput.addEventListener("clear_track", this._clearSong);
+            this._fileInput.addEventListener("fetch_track", this._fetchSong);
             this._pausePlayer.addEventListener("deactivateEditor", this._deactivate);
             this._recordButton.addEventListener("contextmenu", (event) => {
                 if (event.ctrlKey) {
@@ -30635,6 +30646,412 @@ You should be redirected to the song at:<br /><br />
                 const layoutOption = this._optionsMenu.querySelector("[value=layout]");
                 layoutOption.disabled = true;
                 layoutOption.setAttribute("hidden", "");
+            }
+        }
+        static _arrayBufferToBase64(buffer) {
+            var binary = '';
+            var bytes = new Uint8Array(buffer);
+            var len = bytes.byteLength;
+            for (var i = 0; i < len; i++) {
+                binary += String.fromCharCode(bytes[i]);
+            }
+            return window.btoa(binary);
+        }
+        lerp(low, high, t) {
+            return low + t * (high - low);
+        }
+        _exportCurrentToMidi(isIntro, isOutro, loops) {
+            const song = this._doc.song;
+            const midiTicksPerBeepBoxTick = 2;
+            const midiTicksPerBeat = midiTicksPerBeepBoxTick * Config.ticksPerPart * Config.partsPerBeat;
+            const midiTicksPerPart = midiTicksPerBeepBoxTick * Config.ticksPerPart;
+            const secondsPerMinute = 60;
+            const microsecondsPerMinute = secondsPerMinute * 1000000;
+            const beatsPerMinute = song.getBeatsPerMinute();
+            const microsecondsPerBeat = Math.round(microsecondsPerMinute / beatsPerMinute);
+            const midiTicksPerBar = midiTicksPerBeat * song.beatsPerBar;
+            const pitchBendRange = 24;
+            const defaultNoteVelocity = 90;
+            const unrolledBars = [];
+            if (isIntro) {
+                for (let bar = 0; bar < song.loopStart; bar++) {
+                    unrolledBars.push(bar);
+                }
+            }
+            for (let loopIndex = 0; loopIndex < Number(loops); loopIndex++) {
+                for (let bar = song.loopStart; bar < song.loopStart + song.loopLength; bar++) {
+                    unrolledBars.push(bar);
+                }
+            }
+            if (isOutro) {
+                for (let bar = song.loopStart + song.loopLength; bar < song.barCount; bar++) {
+                    unrolledBars.push(bar);
+                }
+            }
+            const tracks = [{ isMeta: true, channel: -1, midiChannel: -1, isNoise: false, isDrumset: false }];
+            let midiChannelCounter = 0;
+            let foundADrumset = false;
+            for (let channel = 0; channel < this._doc.song.pitchChannelCount + this._doc.song.noiseChannelCount; channel++) {
+                if (!foundADrumset && this._doc.song.channels[channel].instruments[0].type == 4) {
+                    tracks.push({ isMeta: false, channel: channel, midiChannel: 9, isNoise: true, isDrumset: true });
+                    foundADrumset = true;
+                }
+                else {
+                    if (midiChannelCounter >= 16)
+                        continue;
+                    tracks.push({ isMeta: false, channel: channel, midiChannel: midiChannelCounter++, isNoise: this._doc.song.getChannelIsNoise(channel), isDrumset: false });
+                    if (midiChannelCounter == 9)
+                        midiChannelCounter++;
+                }
+            }
+            const writer = new ArrayBufferWriter(1024);
+            writer.writeUint32(1297377380);
+            writer.writeUint32(6);
+            writer.writeUint16(1);
+            writer.writeUint16(tracks.length);
+            writer.writeUint16(midiTicksPerBeat);
+            for (const track of tracks) {
+                writer.writeUint32(1297379947);
+                const { isMeta, channel, midiChannel, isNoise, isDrumset } = track;
+                const trackStartIndex = writer.getWriteIndex();
+                writer.writeUint32(0);
+                let prevTime = 0;
+                let barStartTime = 0;
+                const writeEventTime = function (time) {
+                    if (time < prevTime)
+                        throw new Error("Midi event time cannot go backwards.");
+                    writer.writeMidiVariableLength(time - prevTime);
+                    prevTime = time;
+                };
+                const writeControlEvent = function (message, value) {
+                    if (!(value >= 0 && value <= 0x7F))
+                        throw new Error("Midi control event value out of range: " + value);
+                    writer.writeUint8(176 | midiChannel);
+                    writer.writeMidi7Bits(message);
+                    writer.writeMidi7Bits(value | 0);
+                };
+                if (isMeta) {
+                    writeEventTime(0);
+                    writer.writeUint8(255);
+                    writer.writeMidi7Bits(1);
+                    writer.writeMidiAscii("Composed with jummbus.bitbucket.io");
+                    writeEventTime(0);
+                    writer.writeUint8(255);
+                    writer.writeMidi7Bits(81);
+                    writer.writeMidiVariableLength(3);
+                    writer.writeUint24(microsecondsPerBeat);
+                    writeEventTime(0);
+                    writer.writeUint8(255);
+                    writer.writeMidi7Bits(88);
+                    writer.writeMidiVariableLength(4);
+                    writer.writeUint8(song.beatsPerBar);
+                    writer.writeUint8(2);
+                    writer.writeUint8(24);
+                    writer.writeUint8(8);
+                    const isMinor = Config.scales[song.scale].flags[3] && !Config.scales[song.scale].flags[4];
+                    const key = song.key;
+                    let numSharps = key;
+                    if ((key & 1) == 1)
+                        numSharps += 6;
+                    if (isMinor)
+                        numSharps += 9;
+                    while (numSharps > 6)
+                        numSharps -= 12;
+                    writeEventTime(0);
+                    writer.writeUint8(255);
+                    writer.writeMidi7Bits(89);
+                    writer.writeMidiVariableLength(2);
+                    writer.writeInt8(numSharps);
+                    writer.writeUint8(isMinor ? 1 : 0);
+                    if (isIntro)
+                        barStartTime += midiTicksPerBar * song.loopStart;
+                    writeEventTime(barStartTime);
+                    writer.writeUint8(255);
+                    writer.writeMidi7Bits(6);
+                    writer.writeMidiAscii("Loop Start");
+                    for (let loopIndex = 0; loopIndex < loops; loopIndex++) {
+                        barStartTime += midiTicksPerBar * song.loopLength;
+                        writeEventTime(barStartTime);
+                        writer.writeUint8(255);
+                        writer.writeMidi7Bits(6);
+                        writer.writeMidiAscii(loopIndex < Number(loops) - 1 ? "Loop Repeat" : "Loop End");
+                    }
+                    if (isOutro)
+                        barStartTime += midiTicksPerBar * (song.barCount - song.loopStart - song.loopLength);
+                    if (barStartTime != midiTicksPerBar * unrolledBars.length)
+                        throw new Error("Miscalculated number of bars.");
+                }
+                else {
+                    let channelName = isNoise
+                        ? "noise channel " + channel
+                        : "pitch channel " + channel;
+                    writeEventTime(0);
+                    writer.writeUint8(255);
+                    writer.writeMidi7Bits(3);
+                    writer.writeMidiAscii(channelName);
+                    writeEventTime(0);
+                    writeControlEvent(101, 0);
+                    writeEventTime(0);
+                    writeControlEvent(100, 0);
+                    writeEventTime(0);
+                    writeControlEvent(6, pitchBendRange);
+                    writeEventTime(0);
+                    writeControlEvent(38, 0);
+                    writeEventTime(0);
+                    writeControlEvent(101, 127);
+                    writeEventTime(0);
+                    writeControlEvent(100, 127);
+                    let prevInstrumentIndex = -1;
+                    function writeInstrumentSettings(instrumentIndex) {
+                        const instrument = song.channels[channel].instruments[instrumentIndex];
+                        const preset = EditorConfig.valueToPreset(instrument.preset);
+                        if (prevInstrumentIndex != instrumentIndex) {
+                            prevInstrumentIndex = instrumentIndex;
+                            writeEventTime(barStartTime);
+                            writer.writeUint8(255);
+                            writer.writeMidi7Bits(4);
+                            writer.writeMidiAscii("Instrument " + (instrumentIndex + 1));
+                            if (!isDrumset) {
+                                let instrumentProgram = 81;
+                                if (preset != null && preset.midiProgram != undefined) {
+                                    instrumentProgram = preset.midiProgram;
+                                }
+                                else if (instrument.type == 4) {
+                                    instrumentProgram = 116;
+                                }
+                                else {
+                                    if (instrument.type == 2 || instrument.type == 3) {
+                                        if (isNoise) {
+                                            instrumentProgram = 116;
+                                        }
+                                        else {
+                                            instrumentProgram = 75;
+                                        }
+                                    }
+                                    else if (instrument.type == 0) {
+                                        if (ExportPrompt.midiChipInstruments.length > instrument.chipWave) {
+                                            instrumentProgram = ExportPrompt.midiChipInstruments[instrument.chipWave];
+                                        }
+                                    }
+                                    else if (instrument.type == 6 || instrument.type == 1 || instrument.type == 5) {
+                                        instrumentProgram = 81;
+                                    }
+                                    else if (instrument.type == 7) {
+                                        instrumentProgram = 0x19;
+                                    }
+                                    else if (instrument.type == 8) {
+                                        instrumentProgram = 81;
+                                    }
+                                    else {
+                                        throw new Error("Unrecognized instrument type.");
+                                    }
+                                }
+                                writeEventTime(barStartTime);
+                                writer.writeUint8(192 | midiChannel);
+                                writer.writeMidi7Bits(instrumentProgram);
+                            }
+                            writeEventTime(barStartTime);
+                            let instrumentVolume = volumeMultToMidiVolume(Synth.instrumentVolumeToVolumeMult(instrument.volume));
+                            writeControlEvent(7, Math.min(0x7f, Math.round(instrumentVolume)));
+                            writeEventTime(barStartTime);
+                            let instrumentPan = (instrument.pan / Config.panCenter - 1) * 0x3f + 0x40;
+                            writeControlEvent(10, Math.min(0x7f, Math.round(instrumentPan)));
+                        }
+                    }
+                    if (song.getPattern(channel, 0) == null) {
+                        writeInstrumentSettings(0);
+                    }
+                    let prevPitchBend = defaultMidiPitchBend;
+                    let prevExpression = defaultMidiExpression;
+                    let shouldResetExpressionAndPitchBend = false;
+                    const channelRoot = isNoise ? Config.spectrumBasePitch : Config.keys[song.key].basePitch;
+                    const intervalScale = isNoise ? Config.noiseInterval : 1;
+                    for (const bar of unrolledBars) {
+                        const pattern = song.getPattern(channel, bar);
+                        if (pattern != null) {
+                            const instrumentIndex = pattern.instruments[0];
+                            const instrument = song.channels[channel].instruments[instrumentIndex];
+                            const preset = EditorConfig.valueToPreset(instrument.preset);
+                            writeInstrumentSettings(instrumentIndex);
+                            let usesArpeggio = instrument.getChord().arpeggiates;
+                            let polyphony = usesArpeggio ? 1 : Config.maxChordSize;
+                            if (instrument.getChord().customInterval) {
+                                if (instrument.type == 0 || instrument.type == 5) {
+                                    polyphony = 2;
+                                    usesArpeggio = true;
+                                }
+                                else if (instrument.type == 1) {
+                                    polyphony = Config.operatorCount;
+                                }
+                                else {
+                                    console.error("Unrecognized instrument type for harmonizing arpeggio: " + instrument.type);
+                                }
+                            }
+                            for (let noteIndex = 0; noteIndex < pattern.notes.length; noteIndex++) {
+                                const note = pattern.notes[noteIndex];
+                                const noteStartTime = barStartTime + note.start * midiTicksPerPart;
+                                let pinTime = noteStartTime;
+                                let pinSize = note.pins[0].size;
+                                let pinInterval = note.pins[0].interval;
+                                const prevPitches = [-1, -1, -1, -1];
+                                const nextPitches = [-1, -1, -1, -1];
+                                const toneCount = Math.min(polyphony, note.pitches.length);
+                                const velocity = isDrumset ? Math.max(1, Math.round(defaultNoteVelocity * note.pins[0].size / Config.noteSizeMax)) : defaultNoteVelocity;
+                                let mainInterval = note.pickMainInterval();
+                                let pitchOffset = mainInterval * intervalScale;
+                                if (!isDrumset) {
+                                    let maxPitchOffset = pitchBendRange;
+                                    let minPitchOffset = -pitchBendRange;
+                                    for (let pinIndex = 1; pinIndex < note.pins.length; pinIndex++) {
+                                        const interval = note.pins[pinIndex].interval * intervalScale;
+                                        maxPitchOffset = Math.min(maxPitchOffset, interval + pitchBendRange);
+                                        minPitchOffset = Math.max(minPitchOffset, interval - pitchBendRange);
+                                    }
+                                    pitchOffset = Math.min(maxPitchOffset, Math.max(minPitchOffset, pitchOffset));
+                                }
+                                for (let pinIndex = 1; pinIndex < note.pins.length; pinIndex++) {
+                                    const nextPinTime = noteStartTime + note.pins[pinIndex].time * midiTicksPerPart;
+                                    const nextPinSize = note.pins[pinIndex].size;
+                                    const nextPinInterval = note.pins[pinIndex].interval;
+                                    const length = nextPinTime - pinTime;
+                                    for (let midiTick = 0; midiTick < length; midiTick++) {
+                                        const midiTickTime = pinTime + midiTick;
+                                        const linearSize = this.lerp(pinSize, nextPinSize, midiTick / length);
+                                        const linearInterval = this.lerp(pinInterval, nextPinInterval, midiTick / length);
+                                        const interval = linearInterval * intervalScale - pitchOffset;
+                                        const pitchBend = Math.max(0, Math.min(0x3fff, Math.round(0x2000 * (1.0 + interval / pitchBendRange))));
+                                        const expression = Math.min(0x7f, Math.round(volumeMultToMidiExpression(Synth.noteSizeToVolumeMult(linearSize))));
+                                        if (pitchBend != prevPitchBend) {
+                                            writeEventTime(midiTickTime);
+                                            writer.writeUint8(224 | midiChannel);
+                                            writer.writeMidi7Bits(pitchBend & 0x7f);
+                                            writer.writeMidi7Bits((pitchBend >> 7) & 0x7f);
+                                            prevPitchBend = pitchBend;
+                                        }
+                                        if (expression != prevExpression && !isDrumset) {
+                                            writeEventTime(midiTickTime);
+                                            writeControlEvent(11, expression);
+                                            prevExpression = expression;
+                                        }
+                                        const noteStarting = midiTickTime == noteStartTime;
+                                        for (let toneIndex = 0; toneIndex < toneCount; toneIndex++) {
+                                            let nextPitch = note.pitches[toneIndex];
+                                            if (isDrumset) {
+                                                nextPitch += mainInterval;
+                                                const drumsetMap = [
+                                                    36,
+                                                    41,
+                                                    45,
+                                                    48,
+                                                    40,
+                                                    39,
+                                                    59,
+                                                    49,
+                                                    46,
+                                                    55,
+                                                    69,
+                                                    54,
+                                                ];
+                                                if (nextPitch < 0 || nextPitch >= drumsetMap.length)
+                                                    throw new Error("Could not find corresponding drumset pitch. " + nextPitch);
+                                                nextPitch = drumsetMap[nextPitch];
+                                            }
+                                            else {
+                                                if (usesArpeggio && note.pitches.length > toneIndex + 1 && toneIndex == toneCount - 1) {
+                                                    const midiTicksSinceBeat = (midiTickTime - barStartTime) % midiTicksPerBeat;
+                                                    const midiTicksPerArpeggio = Config.ticksPerArpeggio * midiTicksPerPart / Config.ticksPerPart;
+                                                    const arpeggio = Math.floor(midiTicksSinceBeat / midiTicksPerArpeggio);
+                                                    nextPitch = note.pitches[toneIndex + getArpeggioPitchIndex(note.pitches.length - toneIndex, instrument.fastTwoNoteArp, arpeggio)];
+                                                }
+                                                nextPitch = channelRoot + nextPitch * intervalScale + pitchOffset;
+                                                if (preset != null && preset.midiSubharmonicOctaves != undefined) {
+                                                    nextPitch += 12 * preset.midiSubharmonicOctaves;
+                                                }
+                                                else if (isNoise) {
+                                                    nextPitch += 12 * (+EditorConfig.presetCategories.dictionary["Drum Presets"].presets.dictionary["taiko drum"].midiSubharmonicOctaves);
+                                                }
+                                                if (isNoise)
+                                                    nextPitch *= 2;
+                                            }
+                                            nextPitch = Math.max(0, Math.min(127, nextPitch));
+                                            nextPitches[toneIndex] = nextPitch;
+                                            if (!noteStarting && prevPitches[toneIndex] != nextPitches[toneIndex]) {
+                                                writeEventTime(midiTickTime);
+                                                writer.writeUint8(128 | midiChannel);
+                                                writer.writeMidi7Bits(prevPitches[toneIndex]);
+                                                writer.writeMidi7Bits(velocity);
+                                            }
+                                        }
+                                        for (let toneIndex = 0; toneIndex < toneCount; toneIndex++) {
+                                            if (noteStarting || prevPitches[toneIndex] != nextPitches[toneIndex]) {
+                                                writeEventTime(midiTickTime);
+                                                writer.writeUint8(144 | midiChannel);
+                                                writer.writeMidi7Bits(nextPitches[toneIndex]);
+                                                writer.writeMidi7Bits(velocity);
+                                                prevPitches[toneIndex] = nextPitches[toneIndex];
+                                            }
+                                        }
+                                    }
+                                    pinTime = nextPinTime;
+                                    pinSize = nextPinSize;
+                                    pinInterval = nextPinInterval;
+                                }
+                                const noteEndTime = barStartTime + note.end * midiTicksPerPart;
+                                for (let toneIndex = 0; toneIndex < toneCount; toneIndex++) {
+                                    writeEventTime(noteEndTime);
+                                    writer.writeUint8(128 | midiChannel);
+                                    writer.writeMidi7Bits(prevPitches[toneIndex]);
+                                    writer.writeMidi7Bits(velocity);
+                                }
+                                shouldResetExpressionAndPitchBend = true;
+                            }
+                        }
+                        else {
+                            if (shouldResetExpressionAndPitchBend) {
+                                shouldResetExpressionAndPitchBend = false;
+                                if (prevExpression != defaultMidiExpression) {
+                                    prevExpression = defaultMidiExpression;
+                                    writeEventTime(barStartTime);
+                                    writeControlEvent(11, prevExpression);
+                                }
+                                if (prevPitchBend != defaultMidiPitchBend) {
+                                    prevPitchBend = defaultMidiPitchBend;
+                                    writeEventTime(barStartTime);
+                                    writer.writeUint8(224 | midiChannel);
+                                    writer.writeMidi7Bits(prevPitchBend & 0x7f);
+                                    writer.writeMidi7Bits((prevPitchBend >> 7) & 0x7f);
+                                }
+                            }
+                        }
+                        barStartTime += midiTicksPerBar;
+                    }
+                }
+                writeEventTime(barStartTime);
+                writer.writeUint8(255);
+                writer.writeMidi7Bits(47);
+                writer.writeMidiVariableLength(0x00);
+                writer.rewriteUint32(trackStartIndex, writer.getWriteIndex() - trackStartIndex - 4);
+            }
+            const blob = new Blob([writer.toCompactArrayBuffer()], { type: "audio/midi" });
+            console.log("SOME TEST !!!! " + SongEditor._arrayBufferToBase64(writer.toCompactArrayBuffer()));
+            return writer.toCompactArrayBuffer();
+        }
+        save(blob, name) {
+            if (navigator.msSaveOrOpenBlob) {
+                navigator.msSaveOrOpenBlob(blob, name);
+                return;
+            }
+            const anchor = document.createElement("a");
+            if (anchor.download != undefined) {
+                const url = URL.createObjectURL(blob);
+                setTimeout(function () { URL.revokeObjectURL(url); }, 60000);
+                anchor.href = url;
+                anchor.download = name;
+                setTimeout(function () { anchor.dispatchEvent(new MouseEvent("click")); }, 0);
+            }
+            else {
+                const url = URL.createObjectURL(blob);
+                setTimeout(function () { URL.revokeObjectURL(url); }, 60000);
             }
         }
         _toggleDropdownMenu(dropdown, submenu = 0) {

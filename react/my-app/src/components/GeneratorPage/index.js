@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react'
+import React, { useState } from 'react'
 import { 
   GeneratorContainer,
   GeneratorInputContainer,
@@ -48,7 +48,7 @@ const GeneratorSection = () => {
     if (currentSampleState == "ProcessingSample"){
       setCurrentState(prevState => 'SampleAdded');
       submitSample()
-      deactivateEditor()
+      //deactivateEditor()
     }
     else{
       getMIDIRequest()
