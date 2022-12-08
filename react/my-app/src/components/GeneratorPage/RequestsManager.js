@@ -1,7 +1,7 @@
 import { tempoEnum, sRangeEnum, volumeEnum, sentimentEnum } from './GeneratorInput/EnumParametersData'
-import { submitted_sample } from './UpdateMusicPlayers'
+import { submitted_sample, updateEditorWithFile } from './UpdateMusicPlayers'
 
-const machineAddress = "http://150.254.131.192:8080/"
+const machineAddress = "http://150.254.131.192:8080/upload_file"
 
 const notSelected = "none"
 
@@ -44,17 +44,17 @@ export function getMIDIRequest() {
         urlSentiment = positive_sentiment
     }
 
-    const url = new URL(machineAddress + urlSentiment)
+    const url = new URL(machineAddress)// + urlSentiment)
 
-    url.searchParams.append('tempo', tempo)
+    /*url.searchParams.append('tempo', tempo)
     url.searchParams.append('soundsRange', soundsRange)
     url.searchParams.append('volumeLevel', volume)
     
     if (submitted_sample != null){
         url.searchParams.append('sample', submitted_sample)
-    }
+    }*/
 
-    sendRequest(url.toString())
+    sendRequest(url.toString(), submitted_sample)
 }
 
 // Without any parameters, only sentiment
@@ -69,46 +69,58 @@ export function rawGetMIDIRequest() {
     if (sentiment == "Positive"){
         urlSentiment = positive_sentiment
     }
-    const url = new URL("http://150.254.131.192:8080/" + urlSentiment)
+    const url = new URL("http://150.254.131.192:8080/upload_file")// + urlSentiment)
+
+    /*
     if (submitted_sample != null){
         url.searchParams.append('sample', submitted_sample)
-    }
-    sendRequest(url)
+    }*/
+    sendRequest(url, submitted_sample)
 }
 
-function sendRequest(url)
+function sendRequest(url, body)
 {
-    console.log("Request sended: " + "GET " + url)
+    console.log(body)
+    console.log("Request sended: " + "POST " + url)
 
     const req = new XMLHttpRequest();
-    req.open("GET", url, true);
+    req.open("POST", url, true);
     req.setRequestHeader('X-Requested-With', 'XMLHttpRequest'); 
     req.setRequestHeader('Access-Control-Allow-Origin', '*');
+    req.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     req.responseType = "blob";
+
     req.onload = (event) => {
         const blob = req.response;
         console.log("Received: " + blob)
-        // replaceTrackInViewComponent(blob)
+        const inject = document.getElementById("injectMIDI");
+        console.log("Injected");
+
+        const someFile = new File([blob], "response_plik");
+        updateEditorWithFile(inject, someFile);
     }
     req.onerror = (event) => {
         if (req.responseType != "text")
         {
-        console.log('Network request failed')
+            console.log('Network request failed')
         }
         else
         {
-        console.log(req.responseText)
+            console.log(req.responseText)
         }
     }
     req.ontimeout = (event) => {
         if (req.responseType != "text")
         {
-        console.log('Network request failed (timeout)')
+            console.log('Network request failed (timeout)')
         }
         else
         {
-        console.log(req.responseText)
+            console.log(req.responseText)
         }
     }
-    req.send();
+    const jsonBody = JSON.stringify({ "sent": 1, "start_seq_file": body })
+    console.log('with body' + jsonBody)
+
+    req.send(jsonBody);
 }
