@@ -1,7 +1,7 @@
 import { tempoEnum, sRangeEnum, volumeEnum, sentimentEnum } from './GeneratorInput/EnumParametersData'
 import { submitted_sample, updateEditorWithFile } from './UpdateMusicPlayers'
 
-const machineAddress = "http://150.254.131.192:8080/upload_file"
+const machineAddress = "http://150.254.131.192:8080/generate"
 
 const notSelected = "none"
 
@@ -69,7 +69,7 @@ export function rawGetMIDIRequest() {
     if (sentiment == "Positive"){
         urlSentiment = positive_sentiment
     }
-    const url = new URL("http://150.254.131.192:8080/upload_file")// + urlSentiment)
+    const url = new URL(machineAddress)// + urlSentiment)
 
     /*
     if (submitted_sample != null){
