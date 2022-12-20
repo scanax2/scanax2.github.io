@@ -62,7 +62,7 @@ const GeneratorSection = () => {
             <GeneratorInput toggleModal={addSampleClick} sampleState={GeneratorFSM[currentSampleState]} generateMusicClick={generateMusicClick}/>
           </GeneratorInputContainer>
           <GeneratorPlayerContainer>
-            <GeneratorPlayer disabled={false}/>
+            <GeneratorPlayer disabled={currentSampleState != "ProcessingSample"}/>
           </GeneratorPlayerContainer>
     </GeneratorContainer>
   )
