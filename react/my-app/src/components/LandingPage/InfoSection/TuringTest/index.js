@@ -1,5 +1,5 @@
 import React from 'react'
-import { ButtonR } from '../../../ButtonElements'
+import { ButtonE } from '../../../ButtonElements'
 import {
     InfoContainer,
     InfoWrapper,
@@ -13,6 +13,9 @@ import {
     Icon,
     SubHeadingWrapSmall
 } from './../InfoSectionElements'
+
+const LINK_TO_TEST = "https://script.google.com/macros/s/AKfycbyPVEPguinhxzVAj9tkLekw7fBA-j3yRNbYiJGrZuPofePC3ihcvb2lz2i6tBYj67beQw/exec"
+
 
 const InfoSectionTuringTest = ({id, lightBg, topLine, lightText, 
     headline, darkText, description, buttonLabel, img, alt, primary, dark, dark2}) => {
@@ -29,7 +32,7 @@ const InfoSectionTuringTest = ({id, lightBg, topLine, lightText,
                     <Subtitle centerAlign={true} darkText={darkText} large={true}>success rate</Subtitle>
                 </SubHeadingWrap>
                 <BtnWrap>
-                    <ButtonR to='/TuringTest'
+                    <ButtonE target="_blank" href={LINK_TO_TEST}
                     smooth={true}
                     duration={500}
                     spy={true}
@@ -39,7 +42,7 @@ const InfoSectionTuringTest = ({id, lightBg, topLine, lightText,
                     dark={dark ? 1 : 0}
                     dark2 ={dark2 ? 1 : 0}
                     big={true}
-                    >{buttonLabel}</ButtonR>
+                    >{buttonLabel}</ButtonE>
                 </BtnWrap>
             </TextWrapper>
         </InfoWrapper>
