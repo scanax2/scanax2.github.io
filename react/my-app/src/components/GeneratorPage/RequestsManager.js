@@ -1,86 +1,77 @@
 import { tempoEnum, sRangeEnum, volumeEnum, sentimentEnum } from './GeneratorInput/EnumParametersData'
 import { submitted_sample, updateEditorWithFile } from './UpdateMusicPlayers'
 
+// GLOBALS
 const machineAddress = "http://150.254.131.192:8080/generate"
 
-const notSelected = "none"
+const NOT_SELECTED = "none"
 
-const negative_sentiment = "sent0"
-const positive_sentiment = "sent1"
+const negative_sentiment = 0
+const positive_sentiment = 1
 
+// sent: {0/1}, tempo: {'fast', 'medium', 'slow'}, pitch: {'high', 'medium', 'low'}, duration: {0/1/2} - 0 - (0:15 - 0:45), 1 - (0:45, 1:30), 2 - (1:30 - 3:00)
+const music_parameters = ['sent', 'tempo', 'pitch', 'volume', 'duration']
+const start_sequence = 'start_seq_file'
+
+
+// FUNCTIONS
 function parseInputEnum(currentEnum) {
     const optionDiv = document.getElementById(currentEnum.id).querySelectorAll("#enumOption")
 
    for (var i = 0; i < optionDiv.length; i++) {
         const entry = optionDiv[i]
-        if (entry.selected !== notSelected){
-            return entry.selected
+        if (entry.selected !== NOT_SELECTED){
+            return entry.selected.toLowerCase()
         }
     }
-    return notSelected
+    return NOT_SELECTED.toLowerCase()
 }
 
 export function getMIDIRequest() {
 
+    var sentiment = parseInputEnum(sentimentEnum)
+    if (sentiment == "negative"){
+        sentiment = negative_sentiment
+    }
+    else if (sentiment == "positive"){
+        sentiment = positive_sentiment
+    }
+    else{
+        sentiment = NOT_SELECTED
+        // Show error message
+        alert("Select sentiment")
+        return;
+    }
+
     const tempo = parseInputEnum(tempoEnum)
     const soundsRange = parseInputEnum(sRangeEnum)
     const volume = parseInputEnum(volumeEnum)
-    const sentiment = parseInputEnum(sentimentEnum)
 
-    const parametersArray = [tempo, soundsRange, volume, sentiment]
-
+    const parametersArray = [sentiment, tempo, soundsRange, volume]
+    console.log("Parsed parameters: ")
     console.log(parametersArray)
 
-    if (parametersArray.includes(notSelected)) {
-        //alert("Select all enum options")
-        // TODO: replace
-        rawGetMIDIRequest()
-        return notSelected
+    const parametersDictionary = {}
+    for (var i = 0; i < parametersArray.length; i++) {
+        const parameter = parametersArray[i]
+        if (parameter == NOT_SELECTED){
+            continue
+        }
+        const type = music_parameters[i]
+        parametersDictionary[type] = parameter
     }
-
-    var urlSentiment = negative_sentiment
-    
-    if (sentiment == "Positive"){
-        urlSentiment = positive_sentiment
-    }
-
-    const url = new URL(machineAddress)// + urlSentiment)
-
-    /*url.searchParams.append('tempo', tempo)
-    url.searchParams.append('soundsRange', soundsRange)
-    url.searchParams.append('volumeLevel', volume)
-    
     if (submitted_sample != null){
-        url.searchParams.append('sample', submitted_sample)
-    }*/
+        parametersDictionary[start_sequence] = submitted_sample
+    }
+    console.log("Parsed dictionary: ")
+    console.log(parametersDictionary)
 
-    sendRequest(url.toString(), submitted_sample)
+    const url = new URL(machineAddress)
+    sendRequest(url.toString(), parametersDictionary)
 }
 
-// Without any parameters, only sentiment
-export function rawGetMIDIRequest() {
-    const sentiment = parseInputEnum(sentimentEnum)
-    if (sentiment === notSelected) {
-        alert("Select sentiment enum options")
-        return notSelected
-    }
-    var urlSentiment = negative_sentiment
-
-    if (sentiment == "Positive"){
-        urlSentiment = positive_sentiment
-    }
-    const url = new URL(machineAddress)// + urlSentiment)
-
-    /*
-    if (submitted_sample != null){
-        url.searchParams.append('sample', submitted_sample)
-    }*/
-    sendRequest(url, submitted_sample)
-}
-
-function sendRequest(url, body)
+function sendRequest(url, bodyDictionary)
 {
-    console.log(body)
     console.log("Request sended: " + "POST " + url)
 
     const req = new XMLHttpRequest();
@@ -91,13 +82,7 @@ function sendRequest(url, body)
     req.responseType = "blob";
 
     req.onload = (event) => {
-        const blob = req.response;
-        console.log("Received: " + blob)
-        const inject = document.getElementById("injectMIDI");
-        console.log("Injected");
-
-        const someFile = new File([blob], "response_plik");
-        updateEditorWithFile(inject, someFile);
+        processResponse(req)
     }
     req.onerror = (event) => {
         if (req.responseType != "text")
@@ -119,8 +104,17 @@ function sendRequest(url, body)
             console.log(req.responseText)
         }
     }
-    const jsonBody = JSON.stringify({ "sent": 1, "start_seq_file": body })
+    const jsonBody = JSON.stringify(bodyDictionary)
     console.log('with body' + jsonBody)
 
     req.send(jsonBody);
+}
+
+function processResponse(req){
+    const blob = req.response;
+    console.log("Received: " + blob)
+
+    const trackFile = new File([blob], "generated_music");
+
+    updateEditorWithFile(trackFile);
 }

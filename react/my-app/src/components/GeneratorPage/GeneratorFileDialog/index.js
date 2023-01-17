@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React from 'react'
 import Modal from "react-modal";
 import { 
     ModalContentWrapper,
@@ -9,14 +9,13 @@ import {
 } from './GeneratorFileDialogElements'
 import './modalStyle.css'
 import { Button } from '../../ButtonElements'
-import { updateTrackDisplay, updateEditorTrack } from '../UpdateMusicPlayers';
+import { updateEditorTrack } from '../UpdateMusicPlayers';
 
 const GeneratorFileDialog = ({isOpen, toggleModal, toggleSampleState}) => {
 
     const createSample = () => {
         toggleModal()
-        toggleSampleState("ProcessingSample")
-        updateTrackDisplay()
+        toggleSampleState()
         updateEditorTrack()
     };
 

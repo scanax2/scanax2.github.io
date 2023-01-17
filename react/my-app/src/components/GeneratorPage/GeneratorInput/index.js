@@ -13,13 +13,13 @@ import { instrumentsDropdown, durationDropdown } from './EnumDropdownData'
 import { Button } from '../../ButtonElements'
 import GeneratorEnumDropdown from './GeneratorEnumDropdown'
 
-export const GeneratorInput = ({refs, toggleModal, sampleState, generateMusicClick}) => {
+export const GeneratorInput = ({refs, toggleModal, labels, generateMusicClick}) => {
 
   // Clear all presets
   const [clearTrigger, setTrigger] = useState(0);
 
-  const generatorText = sampleState[0];
-  const sampleButtonText = sampleState[1];
+  const generatorText = labels[0];
+  const sampleButtonText = labels[1];
   
   return (
     <GeneratorInputWrapper>

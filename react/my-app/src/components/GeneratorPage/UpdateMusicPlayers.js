@@ -1,79 +1,68 @@
 
 export var submitted_sample;
 
+// Editor helper elements
+const MIDI_INJECTOR = "injectMIDI"
+const MIDI_FILE_INPUT = "midi_file_input"
+const PAUSE_PLAYER_ELEMENT = "pausePlayer"
+
+// Events
+const INSERT_MIDI_EVENT = "inject_MIDI"
+const DISABLE_EDITOR_EVENT = "deactivateEditor"
+const CLEAR_EDITOR_TRACK_EVENT = "clear_track"
+const FETCH_MIDI_TRACK_EVENT = "fetch_track"
+
 var current_sample;
 
-export function clearTrackDisplay() {
-    /* TMP player turned off
-    const player = document.getElementById("myPlayer");
-    const visualizer = document.getElementById("myVisualizer");
-  
-    player.src = "";
-    visualizer.src = "";*/
-}
-
-export function updateTrackDisplay() {
-
-    const inputElement = document.getElementById("midi_file_input");
-    const fileList = inputElement.files;
-    const file = fileList[0];
-
-    current_sample = file;
-    
-    replaceTrackInViewComponent(file)
-}
-
 export function updateEditorTrack() {
-    const inject = document.getElementById("injectMIDI");
+    const inject = document.getElementById(MIDI_INJECTOR);
     console.log("Injected")
   
-    const inputElement = document.getElementById("midi_file_input");
+    const inputElement = document.getElementById(MIDI_FILE_INPUT);
     const fileList = inputElement.files;
     const file = fileList[0];
   
-    updateEditorWithFile(inject, file)
+    updateComponentWithFile(inject, file)
 }
 
-export function updateEditorWithFile(component, file) {
+export function updateEditorWithFile(file) {
+    const inject = document.getElementById("injectMIDI");
+    console.log("Injected");
+
+    updateComponentWithFile(inject, file)
+}
+
+function updateComponentWithFile(component, file) {
     const dataTransfer = new DataTransfer();
     dataTransfer.items.add(file);
 
     component.files = dataTransfer.files;
   
-    const e = new Event('inject_MIDI')
+    const e = new Event(INSERT_MIDI_EVENT)
     component.dispatchEvent(e);
-    console.log("Dispatched inject_MIDI");
+    console.log("Dispatched: " + INSERT_MIDI_EVENT);
 }
 
 export function deactivateEditor() {
-    const pause_element = document.getElementById("pausePlayer");
+    const pause_element = document.getElementById(PAUSE_PLAYER_ELEMENT);
     if (pause_element == null){
         console.log("Null pause element")
         return
     }
-    console.log("Injected", pause_element)
-    const e = new Event('deactivateEditor')
-    pause_element.dispatchEvent(e);
-    console.log("Dispatched deactivateEditor");
-}
+    console.log("Injected: ", pause_element)
 
-export function replaceTrackInViewComponent(file) {
-    /* TMP player turned off
-    const url = URL.createObjectURL(file);
-    
-    const player = document.getElementById("myPlayer");
-    const visualizer = document.getElementById("myVisualizer");
-  
-    player.src = url;
-    visualizer.src = url;*/
+    const e = new Event(DISABLE_EDITOR_EVENT)
+    pause_element.dispatchEvent(e);
+    console.log("Dispatched: " + DISABLE_EDITOR_EVENT);
 }
 
 export function clearAllTracks() {
     deactivateEditor()
-    const inject = document.getElementById("injectMIDI");
-    const e = new Event('clear_track')
+    const inject = document.getElementById(MIDI_INJECTOR);
+
+    const e = new Event(CLEAR_EDITOR_TRACK_EVENT)
     inject.dispatchEvent(e);
-    console.log("Dispatched clear_track");
+    console.log("Dispatched: " + CLEAR_EDITOR_TRACK_EVENT);
 }
 
 // Sample
@@ -106,43 +95,18 @@ function _arrayBufferToBase64( buffer ) {
     return window.btoa( binary );
 }
 
-function converBase64toBlob(content, contentType) {
-    contentType = contentType || '';
-    var sliceSize = 512;
-    var byteCharacters = window.atob(content); //method which converts base64 to binary
-    var byteArrays = [
-    ];
-    for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
-      var slice = byteCharacters.slice(offset, offset + sliceSize);
-      var byteNumbers = new Array(slice.length);
-      for (var i = 0; i < slice.length; i++) {
-        byteNumbers[i] = slice.charCodeAt(i);
-      }
-      var byteArray = new Uint8Array(byteNumbers);
-      byteArrays.push(byteArray);
-    }
-    var blob = new Blob(byteArrays, {
-      type: contentType
-    }); //statement which creates the blob
-    return blob;
-}
-
 export async function refreshSubmittedTrack() {
-    const inject = document.getElementById("injectMIDI");
-    const e = new Event('fetch_track')
+    const inject = document.getElementById(MIDI_INJECTOR);
+    
+    const e = new Event(FETCH_MIDI_TRACK_EVENT)
     inject.dispatchEvent(e);
-    console.log("Dispatched fetch_track");
+    console.log("Dispatched: " + FETCH_MIDI_TRACK_EVENT);
 
     const track_base64 = inject.getAttribute('track_base64')
 
     deactivateEditor()
 
     submitted_sample = track_base64
-
-    // How to insert
-    /*const file = converBase64toBlob(submitted_sample, '')
-    var fileF = new File([file], "name");
-    updateEditorWithFile(inject, fileF)*/
 }
 
 export function removeSample() {

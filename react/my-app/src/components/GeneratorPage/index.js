@@ -7,62 +7,46 @@ import {
 import GeneratorInput from './GeneratorInput'
 import GeneratorPlayer from './GeneratorPlayer'
 import GeneratorFileDialog from './GeneratorFileDialog'
-import { getMIDIRequest } from './RequestsManager'
-import { deactivateEditor, removeSample, submitSample } from './UpdateMusicPlayers'
-
-
-const GeneratorFSM = {
-  'RawInput': ['Generate music', 'Add sample'],
-  'ProcessingSample': ['Add sample', 'Back'],
-  'SampleAdded': ['Generate music', 'Remove']
-};
+import { 
+  INIT_STATE, 
+  switchStateOnAddSampleButton, 
+  switchStateOnStartProcessingSample, 
+  switchStateOnGeneratorButton,
+  getLabels
+} from './GeneratorFSM'
 
 const GeneratorSection = () => {
 
   const [isFileDialogOpen, setIsOpen] = useState(false);
 
+  const [currentSampleState, setCurrentState] = useState(INIT_STATE)
+  const [isSampleProcessing, setSampleProcessing] = useState(false);
+  const [isSampleAdded, setSampleAdded] = useState(false);
+
   const addSampleClick = () => {
-      // if sample added, clear
-      if (currentSampleState == 'SampleAdded'){
-        toggleSampleState("RawInput")
-        removeSample()
-      }
-      // Back
-      else if (currentSampleState == "ProcessingSample"){
-        toggleSampleState("RawInput")
-        removeSample()
-      }
-      else if (currentSampleState == "RawInput"){
-        setIsOpen(!isFileDialogOpen);
-      }
+    switchStateOnAddSampleButton(currentSampleState, isSampleAdded, toggleSampleState, () => setIsOpen(!isFileDialogOpen));
   }
 
-    // Sample add process
-  const [currentSampleState, setCurrentState] = useState("RawInput")
-
-  const toggleSampleState = (state) => {
-    setCurrentState(prevState => state);
-  };
+  const toggleSampleState = (state, isSampleProcessing, isSampleAdded) => {
+    setCurrentState(prevState => state)
+    setSampleProcessing(prevState => isSampleProcessing)
+    setSampleAdded(prevState => isSampleAdded)
+  }
 
   const generateMusicClick = () => {
-    if (currentSampleState == "ProcessingSample"){
-      setCurrentState(prevState => 'SampleAdded');
-      submitSample()
-      //deactivateEditor()
-    }
-    else{
-      getMIDIRequest()
-    }
+    switchStateOnGeneratorButton(currentSampleState, toggleSampleState)
   }
 
   return (
     <GeneratorContainer>
-          <GeneratorFileDialog isOpen={isFileDialogOpen} toggleModal={addSampleClick} toggleSampleState={toggleSampleState}></GeneratorFileDialog>
+          <GeneratorFileDialog isOpen={isFileDialogOpen} toggleModal={addSampleClick} toggleSampleState={
+            () => switchStateOnStartProcessingSample(toggleSampleState, () => setIsOpen(!isFileDialogOpen))
+            }></GeneratorFileDialog>
           <GeneratorInputContainer>
-            <GeneratorInput toggleModal={addSampleClick} sampleState={GeneratorFSM[currentSampleState]} generateMusicClick={generateMusicClick}/>
+            <GeneratorInput toggleModal={addSampleClick} labels={getLabels(isSampleProcessing, isSampleAdded)} generateMusicClick={generateMusicClick}/>
           </GeneratorInputContainer>
           <GeneratorPlayerContainer>
-            <GeneratorPlayer disabled={currentSampleState != "ProcessingSample"}/>
+            <GeneratorPlayer disabled={currentSampleState == INIT_STATE}/>
           </GeneratorPlayerContainer>
     </GeneratorContainer>
   )
