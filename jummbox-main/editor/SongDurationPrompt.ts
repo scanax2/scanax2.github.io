@@ -60,7 +60,9 @@ export class SongDurationPrompt implements Prompt {
 		this.container.addEventListener("keydown", this._whenKeyPressed);
 	}
 		
-		private _close = (): void => { 
+	private _close = (): void => { 
+		this._doc.prompt = null;
+		this._doc.goBackToStart();
 		this._doc.undo();
 	}
 		

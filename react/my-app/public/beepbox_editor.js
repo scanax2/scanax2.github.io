@@ -19469,6 +19469,8 @@ li.select2-results__option[role=group] > strong:hover {
             this._okayButton = button({ class: "okayButton", style: "width:45%;" }, "Okay");
             this.container = div({ class: "prompt noSelection", style: "width: 250px;" }, h2("Beats Per Bar"), div({ style: "display: flex; flex-direction: row; align-items: center; height: 2em; justify-content: flex-end;" }, div({ style: "text-align: right;" }, "Beats per bar:", br(), span({ style: "font-size: smaller; color: ${ColorConfig.secondaryText};" }, "(Multiples of 3 or 4 are recommended)")), this._beatsStepper), div({ style: "display: flex; flex-direction: row; align-items: center; height: 2em; justify-content: flex-end;" }, div({ class: "selectContainer", style: "width: 100%;" }, this._conversionStrategySelect)), div({ style: "display: flex; flex-direction: row-reverse; justify-content: space-between;" }, this._okayButton), this._cancelButton);
             this._close = () => {
+                this._doc.prompt = null;
+                this._doc.goBackToStart();
                 this._doc.undo();
             };
             this.cleanUp = () => {
@@ -19534,6 +19536,8 @@ li.select2-results__option[role=group] > strong:hover {
             this._okayButton = button$1({ class: "okayButton", style: "width:45%;" }, "Okay");
             this.container = div$1({ class: "prompt noSelection", style: "width: 250px; text-align: right;" }, h2$1("Channel Settings"), label({ style: "display: flex; flex-direction: row; align-items: center; height: 2em; justify-content: flex-end;" }, "Pitch channels:", this._pitchChannelStepper), label({ style: "display: flex; flex-direction: row; align-items: center; height: 2em; justify-content: flex-end;" }, "Drum channels:", this._drumChannelStepper), div$1({ style: "display: flex; flex-direction: row; align-items: center; height: 2em; justify-content: flex-end;" }, "Mod channels:", this._modChannelStepper), label({ style: "display: flex; flex-direction: row; align-items: center; height: 2em; justify-content: flex-end;" }, "Available patterns per channel:", this._patternsStepper), label({ style: "display: flex; flex-direction: row; align-items: center; height: 2em; justify-content: flex-end;" }, "Simultaneous instruments", br$1(), "per channel:", this._layeredInstrumentsBox), label({ style: "display: flex; flex-direction: row; align-items: center; height: 2em; justify-content: flex-end;" }, "Different instruments", br$1(), "per pattern:", this._patternInstrumentsBox), label({ style: "display: flex; flex-direction: row-reverse; justify-content: space-between;" }, this._okayButton), this._cancelButton);
             this._close = () => {
+                this._doc.prompt = null;
+                this._doc.goBackToStart();
                 this._doc.undo();
             };
             this.cleanUp = () => {
@@ -19810,6 +19814,7 @@ li.select2-results__option[role=group] > strong:hover {
             };
             this._close = () => {
                 this._doc.prompt = null;
+                this._doc.goBackToStart();
                 this._doc.undo();
             };
             this.cleanUp = () => {
@@ -20503,6 +20508,7 @@ li.select2-results__option[role=group] > strong:hover {
             };
             this._close = () => {
                 this._doc.prompt = null;
+                this._doc.goBackToStart();
                 this.filterEditor.resetToInitial();
                 this._doc.undo();
             };
@@ -22093,6 +22099,8 @@ You should be redirected to the song at:<br /><br />
             this._cancelButton = button$5({ class: "cancelButton" });
             this.container = div$5({ class: "prompt noSelection", style: "width: 300px;" }, h2$5("Import"), p$1({ style: "text-align: left; margin: 0.5em 0;" }, "BeepBox songs can be exported and re-imported as .json files. You could also use other means to make .json files for BeepBox as long as they follow the same structure."), p$1({ style: "text-align: left; margin: 0.5em 0;" }, "BeepBox can also (crudely) import .mid files. There are many tools available for creating .mid files. Shorter and simpler songs are more likely to work well."), this._fileInput, this._cancelButton);
             this._close = () => {
+                this._doc.prompt = null;
+                this._doc.goBackToStart();
                 this._doc.undo();
             };
             this.cleanUp = () => {
@@ -22129,6 +22137,7 @@ You should be redirected to the song at:<br /><br />
             };
             this._fileInput.select();
             setTimeout(() => this._fileInput.focus());
+            console.log("RUNNED !??! TESTING");
             this._fileInput.addEventListener("change", this._whenFileSelected);
             this._cancelButton.addEventListener("click", this._close);
         }
@@ -22853,6 +22862,8 @@ You should be redirected to the song at:<br /><br />
 				`), div$6("Wide (JB)")));
             this.container = div$6({ class: "prompt noSelection", style: "width: 300px;" }, h2$6("Layout"), this._form, div$6({ style: "display: flex; flex-direction: row-reverse; justify-content: space-between;" }, this._okayButton), this._cancelButton);
             this._close = () => {
+                this._doc.prompt = null;
+                this._doc.goBackToStart();
                 this._doc.undo();
             };
             this.cleanUp = () => {
@@ -23341,6 +23352,7 @@ You should be redirected to the song at:<br /><br />
                 this.masterGainSlider.value = "" + this.startingMasterGain;
                 this._updateLimiter();
                 this._doc.prompt = null;
+                this._doc.goBackToStart();
             };
             this.cleanUp = () => {
                 this._okayButton.removeEventListener("click", this._saveChanges);
@@ -23696,6 +23708,8 @@ You should be redirected to the song at:<br /><br />
             this._okayButton = button$8({ class: "okayButton", style: "width:45%;" }, "Okay");
             this.container = div$8({ class: "prompt noSelection", style: "width: 250px;" }, h2$8("Move Notes Sideways"), div$8({ style: "display: flex; flex-direction: row; align-items: center; height: 2em; justify-content: flex-end;" }, div$8({ style: "text-align: right;" }, "Beats to move:", br$2(), span$2({ style: `font-size: smaller; color: ${ColorConfig.secondaryText};` }, "(Negative is left, positive is right)")), this._beatsStepper), div$8({ style: "display: flex; flex-direction: row; align-items: center; height: 2em; justify-content: flex-end;" }, div$8({ class: "selectContainer", style: "width: 100%;" }, this._conversionStrategySelect)), div$8({ style: "display: flex; flex-direction: row-reverse; justify-content: space-between;" }, this._okayButton), this._cancelButton);
             this._close = () => {
+                this._doc.prompt = null;
+                this._doc.goBackToStart();
                 this._doc.undo();
             };
             this.cleanUp = () => {
@@ -26616,6 +26630,8 @@ You should be redirected to the song at:<br /><br />
             this._okayButton = button$9({ class: "okayButton", style: "width:45%;" }, "Okay");
             this.container = div$9({ class: "prompt noSelection", style: "width: 250px;" }, h2$9("Song Length"), div$9({ style: "display: flex; flex-direction: row; align-items: center; height: 2em; justify-content: flex-end;" }, div$9({ style: "display: inline-block; text-align: right;" }, "Bars per song:", br$3(), span$3({ style: `font-size: smaller; color: ${ColorConfig.secondaryText};` }, "(Multiples of 4 are recommended)")), this._barsStepper), div$9({ style: "display: flex; flex-direction: row; align-items: center; height: 2em; justify-content: flex-end;" }, div$9({ class: "selectContainer", style: "width: 100%;" }, this._positionSelect)), div$9({ style: "display: flex; flex-direction: row-reverse; justify-content: space-between;" }, this._okayButton), this._cancelButton);
             this._close = () => {
+                this._doc.prompt = null;
+                this._doc.goBackToStart();
                 this._doc.undo();
             };
             this.cleanUp = () => {
@@ -26802,6 +26818,8 @@ You should be redirected to the song at:<br /><br />
             this._cancelButton = button$a({ class: "cancelButton" });
             this.container = div$a({ class: "prompt", style: "width: 300px;" }, h2$a("Song Recovery"), div$a({ style: "max-height: 385px; overflow-y: auto;" }, p$2("This is a TEMPORARY list of songs you have recently modified. Please keep your own backups of songs you care about!"), this._songContainer, p$2("(If \"Display Song Data in URL\" is enabled in your preferences, then you may also be able to find song versions in your browser history. However, song recovery won't work if you were browsing in private/incognito mode.)")), this._cancelButton);
             this._close = () => {
+                this._doc.prompt = null;
+                this._doc.goBackToStart();
                 this._doc.undo();
             };
             this.cleanUp = () => {
@@ -26844,6 +26862,8 @@ You should be redirected to the song at:<br /><br />
             this._cancelButton = button$b({ class: "cancelButton" });
             this.container = div$b({ class: "prompt noSelection recordingSetupPrompt", style: "width: 333px; text-align: right; max-height: 90%;" }, h2$b("Note Recording Setup"), div$b({ style: "display: grid; overflow-y: auto; overflow-x: hidden; flex-shrink: 1;" }, p$3("BeepBox can record notes as you perform them. You can start recording by pressing Ctrl+Space (or " + EditorConfig.ctrlSymbol + "P)."), label$2({ style: "display: flex; flex-direction: row; align-items: center; height: 2em; justify-content: flex-end;" }, "Add ● record button next to ▶ play button:", this._showRecordButton), label$2({ style: "display: flex; flex-direction: row; align-items: center; height: 2em; justify-content: flex-end;" }, "Snap recorded notes to the song's rhythm:", this._snapRecordedNotesToRhythm), label$2({ style: "display: flex; flex-direction: row; align-items: center; height: 2em; justify-content: flex-end;" }, "Ignore notes not in the song's scale:", this._ignorePerformedNotesNotInScale), p$3("While recording, you can perform notes on your keyboard!"), label$2({ style: "display: flex; flex-direction: row; align-items: center; height: 2em; justify-content: flex-end;" }, "Keyboard layout:", div$b({ class: "selectContainer", style: "width: 65%; margin-left: 1em;" }, this._keyboardLayout)), this._keyboardLayoutPreview, p$3("When not recording, you can use the computer keyboard either for shortcuts (like C and V for copy and paste) or for performing notes, depending on this mode:"), label$2({ style: "display: flex; flex-direction: row; align-items: center; height: 2em; justify-content: flex-end;" }, div$b({ class: "selectContainer", style: "width: 100%;" }, this._keyboardMode)), p$3("Performing music takes practice! Try slowing the tempo and using this metronome to help you keep a rhythm."), label$2({ style: "display: flex; flex-direction: row; align-items: center; height: 2em; justify-content: flex-end;" }, "Hear metronome while recording:", this._metronomeWhileRecording), label$2({ style: "display: flex; flex-direction: row; align-items: center; height: 2em; justify-content: flex-end;" }, "Count-in 1 bar of metronome before recording:", this._metronomeCountIn), p$3("If you have a ", a({ href: "https://caniuse.com/midi", target: "_blank" }, "compatible browser"), " on a device connected to a MIDI keyboard, you can use it to perform notes in BeepBox! (Or you could buy ", a({ href: "https://imitone.com/", target: "_blank" }, "Imitone"), " or ", a({ href: "https://vochlea.com/", target: "_blank" }, "Dubler"), " to hum notes into a microphone while wearing headphones!)"), label$2({ style: "display: flex; flex-direction: row; align-items: center; height: 2em; justify-content: flex-end;" }, "Enable MIDI performance:", this._enableMidi), p$3("Tip: Recorded notes often overlap such that one note ends after the next note already started. In BeepBox, these notes get split into two notes which may sound different when re-played than they did when you were recording. To fix the sound, you can either manually clean up the notes in the pattern editor, or you could try enabling the \"transition type\" effect on the instrument and setting it to \"continue\"."), div$b({ style: `width: 100%; height: 80px; background: linear-gradient(rgba(0,0,0,0), ${ColorConfig.editorBackground}); position: sticky; bottom: 0; pointer-events: none;` })), label$2({ style: "display: flex; flex-direction: row-reverse; justify-content: space-between;" }, this._okayButton), this._cancelButton);
             this._close = () => {
+                this._doc.prompt = null;
+                this._doc.goBackToStart();
                 this._doc.undo();
             };
             this.cleanUp = () => {
@@ -27102,6 +27122,8 @@ You should be redirected to the song at:<br /><br />
                 else {
                     ColorConfig.setTheme("dark classic");
                 }
+                this._doc.prompt = null;
+                this._doc.goBackToStart();
                 this._doc.undo();
             };
             this.cleanUp = () => {
@@ -27140,6 +27162,8 @@ You should be redirected to the song at:<br /><br />
             this._doc = _doc;
             this._closeButton = button$d({ class: "cancelButton" });
             this._close = () => {
+                this._doc.prompt = null;
+                this._doc.goBackToStart();
                 this._doc.undo();
             };
             this.cleanUp = () => {

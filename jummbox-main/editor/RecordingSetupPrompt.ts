@@ -104,6 +104,8 @@ export class RecordingSetupPrompt implements Prompt {
 	}
 	
 	private _close = (): void => { 
+		this._doc.prompt = null;
+		this._doc.goBackToStart();
 		this._doc.undo();
 	}
 	

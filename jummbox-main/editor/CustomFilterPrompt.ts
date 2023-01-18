@@ -181,6 +181,7 @@ export class CustomFilterPrompt implements Prompt {
 
 	private _close = (): void => {
 		this._doc.prompt = null;
+		this._doc.goBackToStart();
 		// Restore filter settings to default
 		this.filterEditor.resetToInitial();
 		this._doc.undo();
