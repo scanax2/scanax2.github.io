@@ -4,7 +4,7 @@ import { removeSample, submitSample } from './UpdateMusicPlayers'
 // GLOBALS
 export const INIT_STATE = "init_state" // initial state
 const SAMPLE_PROCESSING_STATE = "sample_processing"
-const MUSIC_GENERATED_STATE = "music_generated"
+export const MUSIC_GENERATED_STATE = "music_generated"
 
 const GENERATE_MUSIC_BUTTON_TEXT = "Generate music"
 const SUMBIT_SAMPLE_BUTTON_TEXT = "Add sample"
@@ -12,6 +12,8 @@ const SUMBIT_SAMPLE_BUTTON_TEXT = "Add sample"
 const ADD_SAMPLE_BUTTON_TEXT = "Add sample"
 const BACK_SAMPLE_BUTTON_TEXT = "Back"
 const REMOVE_SAMPLE_BUTTON_TEXT = "Remove"
+
+var toggleState;
 
 // Add sample button / back / remove
 export function switchStateOnAddSampleButton(currentState, isSampleAdded, toggleSampleState, toggleFileDialog) {
@@ -42,7 +44,8 @@ export function switchStateOnStartProcessingSample(toggleSampleState, toggleFile
 export function switchStateOnGeneratorButton(currentState, toggleSampleState) {
     // Generate music
     if (currentState == INIT_STATE) {
-        getMIDIRequest()
+        toggleState = toggleSampleState
+        getMIDIRequest(toggleState)
         // toggleSampleState(MUSIC_GENERATED_STATE)
     }
     // Submit sample

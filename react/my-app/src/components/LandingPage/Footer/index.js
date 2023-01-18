@@ -30,37 +30,8 @@ const Footer = () => {
             <FooterLinksWrapper>
                 <FooterLinkItems>
                     <FooterLinkTitle>Information</FooterLinkTitle>
-                    <FooterLink to="/about-us">about us</FooterLink>
-                    <FooterLink to="/Terms-of-service">Terms of Service</FooterLink>
-                    <FooterLink to="/How-it-works">How it works</FooterLink>
-                    <FooterLink to="/Testimonials">Testimonials</FooterLink>
-                    <FooterLink to="/Prices">Prices</FooterLink>
-                </FooterLinkItems>
-                <FooterLinkItems>
-                    <FooterLinkTitle>Information</FooterLinkTitle>
-                    <FooterLink to="/about-us">about us</FooterLink>
-                    <FooterLink to="/Terms-of-service">Terms of Service</FooterLink>
-                    <FooterLink to="/How-it-works">How it works</FooterLink>
-                    <FooterLink to="/Testimonials">Testimonials</FooterLink>
-                    <FooterLink to="/Prices">Prices</FooterLink>
-                </FooterLinkItems>
-            </FooterLinksWrapper>
-            <FooterLinksWrapper>
-                <FooterLinkItems>
-                    <FooterLinkTitle>Information</FooterLinkTitle>
-                    <FooterLink to="/about-us">about us</FooterLink>
-                    <FooterLink to="/Terms-of-service">Terms of Service</FooterLink>
-                    <FooterLink to="/How-it-works">How it works</FooterLink>
-                    <FooterLink to="/Testimonials">Testimonials</FooterLink>
-                    <FooterLink to="/Prices">Prices</FooterLink>
-                </FooterLinkItems>
-                <FooterLinkItems>
-                    <FooterLinkTitle>Information</FooterLinkTitle>
-                    <FooterLink to="/about-us">about us</FooterLink>
-                    <FooterLink to="/Terms-of-service">Terms of Service</FooterLink>
-                    <FooterLink to="/How-it-works">How it works</FooterLink>
-                    <FooterLink to="/Testimonials">Testimonials</FooterLink>
-                    <FooterLink to="/Prices">Prices</FooterLink>
+                    <FooterLink to="/about-us" onClick={toggleHome}>About us</FooterLink>
+                    <FooterLink to="/terms-of-service" onClick={toggleHome}>Terms of Service</FooterLink>
                 </FooterLinkItems>
             </FooterLinksWrapper>
         </FooterLinksContainer>
@@ -72,14 +43,6 @@ const Footer = () => {
                 <WebsiteRights>
                     GMG © {new Date().getFullYear()} All rights reserved.
                 </WebsiteRights>
-                <SocialIcons>
-                    <SocialIconLink href='/' target="_blank" aria-label="Poznan University">
-                        <FaLinkedin />
-                    </SocialIconLink>
-                    <SocialIconLink href='/' target="_blank" aria-label="Linkedin">
-                        <FaLinkedin />
-                    </SocialIconLink>
-                </SocialIcons>
             </SocialMediaWrap>
         </SocialMedia>
       </FooterWrap>

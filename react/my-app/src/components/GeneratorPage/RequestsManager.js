@@ -1,3 +1,4 @@
+import { MUSIC_GENERATED_STATE } from './GeneratorFSM'
 import { tempoEnum, sRangeEnum, volumeEnum, sentimentEnum } from './GeneratorInput/EnumParametersData'
 import { submitted_sample, updateEditorWithFile } from './UpdateMusicPlayers'
 
@@ -27,7 +28,7 @@ function parseInputEnum(currentEnum) {
     return NOT_SELECTED.toLowerCase()
 }
 
-export function getMIDIRequest() {
+export function getMIDIRequest(toggleState) {
 
     var sentiment = parseInputEnum(sentimentEnum)
     if (sentiment == "negative"){
@@ -67,10 +68,10 @@ export function getMIDIRequest() {
     console.log(parametersDictionary)
 
     const url = new URL(machineAddress)
-    sendRequest(url.toString(), parametersDictionary)
+    sendRequest(url.toString(), parametersDictionary, toggleState)
 }
 
-function sendRequest(url, bodyDictionary)
+function sendRequest(url, bodyDictionary, toggleState)
 {
     console.log("Request sended: " + "POST " + url)
 
@@ -82,7 +83,7 @@ function sendRequest(url, bodyDictionary)
     req.responseType = "blob";
 
     req.onload = (event) => {
-        processResponse(req)
+        processResponse(req, toggleState)
     }
     req.onerror = (event) => {
         if (req.responseType != "text")
@@ -110,11 +111,12 @@ function sendRequest(url, bodyDictionary)
     req.send(jsonBody);
 }
 
-function processResponse(req){
+function processResponse(req, toggleState){
     const blob = req.response;
     console.log("Received: " + blob)
 
     const trackFile = new File([blob], "generated_music");
+    toggleState(MUSIC_GENERATED_STATE)
 
     updateEditorWithFile(trackFile);
 }

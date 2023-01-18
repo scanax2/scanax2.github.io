@@ -13,7 +13,7 @@ import {
     NavBtnLink
 } from './NavbarElements'
 
-const Navbar = ({isOpen, toggle, clear}) => {
+const Navbar = ({isOpen, toggle, clear, onlyButton}) => {
 
   const [scrollNav, setScrollNav] = useState(false);
 
@@ -56,7 +56,7 @@ const Navbar = ({isOpen, toggle, clear}) => {
                         >Turing test</NavLinks>
                     </NavItem>
                 </NavMenu>
-                <NavBtn clear={clear}>
+                <NavBtn clear={clear && !onlyButton}>
                     <NavBtnLink to='/music-generator'>Generate Music</NavBtnLink>
                 </NavBtn>
             </NavbarContainer>
