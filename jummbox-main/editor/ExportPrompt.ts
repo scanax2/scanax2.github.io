@@ -164,6 +164,8 @@ export class ExportPrompt implements Prompt {
         if (this.synth != null)
             this.synth.renderingSong = false;
         this.outputStarted = false;
+        this._doc.prompt = null;
+		this._doc.goBackToStart();
         this._doc.undo();
     }
 

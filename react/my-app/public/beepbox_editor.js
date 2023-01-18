@@ -20819,6 +20819,8 @@ li.select2-results__option[role=group] > strong:hover {
                 if (this.synth != null)
                     this.synth.renderingSong = false;
                 this.outputStarted = false;
+                this._doc.prompt = null;
+                this._doc.goBackToStart();
                 this._doc.undo();
             };
             this.cleanUp = () => {
