@@ -41,11 +41,11 @@ export function switchStateOnStartProcessingSample(toggleSampleState, toggleFile
 }
 
 // Generate music / submit sample
-export function switchStateOnGeneratorButton(currentState, toggleSampleState) {
+export function switchStateOnGeneratorButton(currentState, toggleSampleState, setLoadingIndicator) {
     // Generate music
     if (currentState == INIT_STATE) {
         toggleState = toggleSampleState
-        getMIDIRequest(toggleState)
+        getMIDIRequest(toggleState, setLoadingIndicator)
         // toggleSampleState(MUSIC_GENERATED_STATE)
     }
     // Submit sample

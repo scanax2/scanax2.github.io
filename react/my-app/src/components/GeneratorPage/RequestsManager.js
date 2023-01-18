@@ -28,7 +28,7 @@ function parseInputEnum(currentEnum) {
     return NOT_SELECTED.toLowerCase()
 }
 
-export function getMIDIRequest(toggleState) {
+export function getMIDIRequest(toggleState, setLoadingIndicator) {
 
     var sentiment = parseInputEnum(sentimentEnum)
     if (sentiment == "negative"){
@@ -68,10 +68,10 @@ export function getMIDIRequest(toggleState) {
     console.log(parametersDictionary)
 
     const url = new URL(machineAddress)
-    sendRequest(url.toString(), parametersDictionary, toggleState)
+    sendRequest(url.toString(), parametersDictionary, toggleState, setLoadingIndicator)
 }
 
-function sendRequest(url, bodyDictionary, toggleState)
+function sendRequest(url, bodyDictionary, toggleState, setLoadingIndicator)
 {
     console.log("Request sended: " + "POST " + url)
 
@@ -83,40 +83,48 @@ function sendRequest(url, bodyDictionary, toggleState)
     req.responseType = "blob";
 
     req.onload = (event) => {
-        processResponse(req, toggleState)
+        processResponse(req, toggleState, setLoadingIndicator)
     }
     req.onerror = (event) => {
         if (req.responseType != "text")
         {
             console.log('Network request failed')
+            alert('Network request failed')
         }
         else
         {
             console.log(req.responseText)
+            alert(req.responseText)
         }
+        setLoadingIndicator(false)
     }
     req.ontimeout = (event) => {
         if (req.responseType != "text")
         {
             console.log('Network request failed (timeout)')
+            alert('Network request failed (timeout)')
         }
         else
         {
             console.log(req.responseText)
+            alert(req.responseText)
         }
+        setLoadingIndicator(false)
     }
     const jsonBody = JSON.stringify(bodyDictionary)
     console.log('with body' + jsonBody)
 
     req.send(jsonBody);
+    setLoadingIndicator(true)
 }
 
-function processResponse(req, toggleState){
+function processResponse(req, toggleState, setLoadingIndicator){
     const blob = req.response;
     console.log("Received: " + blob)
 
     const trackFile = new File([blob], "generated_music");
-    toggleState(MUSIC_GENERATED_STATE)
+    toggleState(MUSIC_GENERATED_STATE, false, false)
+    setLoadingIndicator(true)
 
     updateEditorWithFile(trackFile);
 }

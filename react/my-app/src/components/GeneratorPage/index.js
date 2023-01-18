@@ -14,6 +14,7 @@ import {
   switchStateOnGeneratorButton,
   getLabels
 } from './GeneratorFSM'
+import GeneratorLoadingIndicator from './GeneratorLoadingIndicator'
 
 const GeneratorSection = () => {
 
@@ -22,6 +23,8 @@ const GeneratorSection = () => {
   const [currentSampleState, setCurrentState] = useState(INIT_STATE)
   const [isSampleProcessing, setSampleProcessing] = useState(false);
   const [isSampleAdded, setSampleAdded] = useState(false);
+
+  const [isLoading, setLoadingIndicator] = useState(false);
 
   const addSampleClick = () => {
     switchStateOnAddSampleButton(currentSampleState, isSampleAdded, toggleSampleState, () => setIsOpen(!isFileDialogOpen));
@@ -34,11 +37,12 @@ const GeneratorSection = () => {
   }
 
   const generateMusicClick = () => {
-    switchStateOnGeneratorButton(currentSampleState, toggleSampleState)
+    switchStateOnGeneratorButton(currentSampleState, toggleSampleState, setLoadingIndicator)
   }
 
   return (
     <GeneratorContainer>
+          <GeneratorLoadingIndicator isLoading={isLoading}/>
           <GeneratorFileDialog isOpen={isFileDialogOpen} toggleModal={addSampleClick} toggleSampleState={
             () => switchStateOnStartProcessingSample(toggleSampleState, () => setIsOpen(!isFileDialogOpen))
             }></GeneratorFileDialog>
