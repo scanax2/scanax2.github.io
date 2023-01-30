@@ -39,9 +39,6 @@ export function getMIDIRequest(toggleState, setLoadingIndicator) {
     }
     else{
         sentiment = NOT_SELECTED
-        // Show error message
-        alert("Select sentiment")
-        return;
     }
 
     const tempo = parseInputEnum(tempoEnum)

@@ -25,12 +25,10 @@ const InfoSectionTuringTest = ({id, lightBg, topLine, lightText,
             <TextWrapper>
                 <Heading lightText={lightText}>{headline}</Heading>
                 <SubHeadingWrapSmall>
-                    <Subtitle centerAlign={true} darkText={darkText}>{description}</Subtitle>
+                    <Subtitle centerAlign={false} darkText={darkText}>{description}</Subtitle>
                 </SubHeadingWrapSmall>
-                <SubHeadingWrap>
-                    <SubHeading centerAlign={true} lightText={lightText} large={true}>98 %</SubHeading>
-                    <Subtitle centerAlign={true} darkText={darkText} large={true}>success rate</Subtitle>
-                </SubHeadingWrap>
+                <SubHeadingWrapSmall>
+                </SubHeadingWrapSmall>
                 <BtnWrap>
                     <ButtonE target="_blank" href={LINK_TO_TEST}
                     smooth={true}
@@ -42,7 +40,8 @@ const InfoSectionTuringTest = ({id, lightBg, topLine, lightText,
                     dark={dark ? 1 : 0}
                     dark2 ={dark2 ? 1 : 0}
                     big={true}
-                    >{buttonLabel}</ButtonE>
+                    >{buttonLabel}
+                    </ButtonE>
                 </BtnWrap>
             </TextWrapper>
         </InfoWrapper>

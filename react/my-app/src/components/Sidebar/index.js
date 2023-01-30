@@ -20,7 +20,7 @@ const Sidebar = ({isOpen, toggle}) => {
       <SidebarWrapper isOpen={isOpen} onClick={toggle} fix={false}>
         <SidebarMenu>
           <SidebarRouteSimple to="/music-generator" onClick={toggle}>Generate music</SidebarRouteSimple>
-          <SidebarRouteSimple to="/about-us" onClick={toggle}>About</SidebarRouteSimple>
+          <SidebarRouteSimple to="/about-us" onClick={toggle}>About us</SidebarRouteSimple>
           <SidebarRouteSimple to="/terms-of-service" onClick={toggle}>Terms of Service</SidebarRouteSimple>
         </SidebarMenu>
       </SidebarWrapper>

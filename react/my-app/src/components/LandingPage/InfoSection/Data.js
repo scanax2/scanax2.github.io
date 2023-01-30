@@ -24,7 +24,8 @@ export const homeObjTwo = {
     lightText: true,
     lightTextDesc: true,
     headline: 'Music turing test',
-    description: 'We tested our generated music on real people, our model passes turing test with',
+    description: 'Turing Test: Evaluate the Capabilities of AI. We have created a Turing Test to evaluate the capabilities of our Music Generator. \
+    This test consists of 30 samples, each designed to assess the ability of AI to mimic human behavior. Want to see how our AI performs? Click the button below.',
     buttonLabel: 'Try pass test',
     img: img2,
     dark: 'true',

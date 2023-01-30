@@ -42,9 +42,6 @@ export const GeneratorInput = ({refs, toggleModal, labels, generateMusicClick}) 
             <BtnWrapper background={'#000'}>
                 <Button onClick={toggleModal} primary={false} dark={false} fontBig={true}>{sampleButtonText}</Button>
             </BtnWrapper>
-            <DropdownWrapper>
-                <GeneratorEnumDropdown {...durationDropdown}/>
-            </DropdownWrapper>
             <BtnWrapper background={'#32CD32'}>
                 <Button onClick={generateMusicClick} primary={false} dark={false} fontBig={true}>{generatorText}</Button>
             </BtnWrapper>
