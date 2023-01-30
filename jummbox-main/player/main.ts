@@ -597,6 +597,10 @@ function onCopyClicked(): void {
 	if (!succeeded) window.prompt("Copy this:", location.href);
 }
 
+function deactivateAudio(): void {
+	synth.deactivateAudio();
+}
+
 function onShareClicked(): void {
 	(<any>navigator).share({ url: location.href });
 }
@@ -628,6 +632,8 @@ timeline.addEventListener("touchend", onTimelineCursorUp);
 timeline.addEventListener("touchcancel", onTimelineCursorUp);
 
 playButton.addEventListener("click", onTogglePlay);
+playButton.addEventListener("deactivateAudio", deactivateAudio);
+
 loopButton.addEventListener("click", onToggleLoop);
 volumeSlider.addEventListener("input", onVolumeChange);
 zoomButton.addEventListener("click", onToggleZoom);

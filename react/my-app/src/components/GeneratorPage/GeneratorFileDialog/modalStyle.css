@@ -1,0 +1,47 @@
+.mymodal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  
+    border: 1px solid #fff;
+    background: #010101;
+    overflow: auto;
+    border-radius: 4px;
+    outline: none;
+    padding: 20px;
+    z-index: 5;
+  }
+  
+  .myoverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.75);
+    z-index: 5;
+  }
+
+  .ReactModal__Overlay {
+    opacity: 0;
+    transition: opacity 500ms ease-in-out;
+  }
+  
+  .ReactModal__Overlay--after-open {
+    opacity: 1;
+  }
+  
+  .ReactModal__Overlay--before-close {
+    opacity: 0;
+  }
+
+  .file_input {
+    font-size: 18px;
+    display: inline-block;
+    cursor: pointer;
+
+    justify-items: left;
+    align-items: left;
+
+  }

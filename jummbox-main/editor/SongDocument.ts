@@ -929,7 +929,7 @@ export class SongDocument {
 	
 	public toggleDisplayBrowserUrl() {
 		const state: HistoryState = this._getHistoryState()!;
-		this.prefs.displayBrowserUrl = !this.prefs.displayBrowserUrl;
+		this.prefs.displayBrowserUrl = false;
 		this._replaceState(state, this.song.toBase64String());
 	}
 		
@@ -953,16 +953,16 @@ export class SongDocument {
 		
 	private _replaceState(state: HistoryState, hash: string): void {
 		if (this.prefs.displayBrowserUrl) {
-			window.history.replaceState(state, "", "#" + hash);
+			// window.history.replaceState(state, "", "#" + hash);
 		} else {
-			window.sessionStorage.setItem(window.sessionStorage.getItem("currentUndoIndex") || "0", JSON.stringify({state, hash}));
-			window.history.replaceState(null, "", location.pathname);
+			// window.sessionStorage.setItem(window.sessionStorage.getItem("currentUndoIndex") || "0", JSON.stringify({state, hash}));
+			// window.history.replaceState(null, "", location.pathname);
 		}
 	}
 		
 	private _pushState(state: HistoryState, hash: string): void {
 		if (this.prefs.displayBrowserUrl) {
-			window.history.pushState(state, "", "#" + hash);
+			// window.history.pushState(state, "", "#" + hash);
 		} else {
 			let currentIndex: number = Number(window.sessionStorage.getItem("currentUndoIndex"));
 			let oldestIndex: number = Number(window.sessionStorage.getItem("oldestUndoIndex"));
@@ -974,7 +974,7 @@ export class SongDocument {
 				window.sessionStorage.setItem("oldestUndoIndex", String(oldestIndex));
 			}
 				window.sessionStorage.setItem(String(currentIndex), JSON.stringify({state, hash}));
-			window.history.replaceState(null, "", location.pathname);
+			// window.history.replaceState(null, "", location.pathname);
 		}
 		this._lastSequenceNumber = state.sequenceNumber;
 	}
@@ -985,7 +985,7 @@ export class SongDocument {
 		
 	private _forward(): void {
 		if (this.prefs.displayBrowserUrl) {
-			window.history.forward();
+			// window.history.forward();
 		} else {
 			let currentIndex: number = Number(window.sessionStorage.getItem("currentUndoIndex"));
 			let newestIndex: number = Number(window.sessionStorage.getItem("newestUndoIndex"));
@@ -999,7 +999,7 @@ export class SongDocument {
 		
 	private _back(): void {
 		if (this.prefs.displayBrowserUrl) {
-			window.history.back();
+			// window.history.back();
 		} else {
 			let currentIndex: number = Number(window.sessionStorage.getItem("currentUndoIndex"));
 			let oldestIndex: number = Number(window.sessionStorage.getItem("oldestUndoIndex"));

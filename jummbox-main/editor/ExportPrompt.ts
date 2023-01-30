@@ -35,7 +35,7 @@ function save(blob: Blob, name: string): void {
     } else {
         const url: string = URL.createObjectURL(blob);
         setTimeout(function () { URL.revokeObjectURL(url); }, 60000);
-        if (!window.open(url, "_blank")) window.location.href = url;
+        // if (!window.open(url, "_blank")) window.location.href = url;
     }
 }
 
@@ -68,7 +68,7 @@ export class ExportPrompt implements Prompt {
         this._outputProgressBar,
         this._outputProgressLabel,
     );
-    private static readonly midiChipInstruments: number[] = [
+    public static readonly midiChipInstruments: number[] = [
         0x4A, // rounded -> recorder
         0x47, // triangle -> clarinet
         0x50, // square -> square wave
@@ -164,6 +164,8 @@ export class ExportPrompt implements Prompt {
         if (this.synth != null)
             this.synth.renderingSong = false;
         this.outputStarted = false;
+        this._doc.prompt = null;
+		this._doc.goBackToStart();
         this._doc.undo();
     }
 

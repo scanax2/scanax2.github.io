@@ -485,7 +485,9 @@ export class TipPrompt implements Prompt {
 		this._closeButton.addEventListener("click", this._close);
 	}
 		
-		private _close = (): void => { 
+	private _close = (): void => { 
+		this._doc.prompt = null;
+		this._doc.goBackToStart();
 		this._doc.undo();
 	}
 		

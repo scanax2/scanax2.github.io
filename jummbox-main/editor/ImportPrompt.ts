@@ -31,17 +31,20 @@ export class ImportPrompt implements Prompt {
 		
 	constructor(private _doc: SongDocument) {
 		this._fileInput.select();
-			setTimeout(()=>this._fileInput.focus());
-			
+		setTimeout(()=>this._fileInput.focus());
+		
+		console.log("RUNNED !??! TESTING")
 		this._fileInput.addEventListener("change", this._whenFileSelected);
 		this._cancelButton.addEventListener("click", this._close);
 	}
 		
-		private _close = (): void => { 
+	private _close = (): void => { 
+		this._doc.prompt = null;
+		this._doc.goBackToStart();
 		this._doc.undo();
 	}
 		
-		public cleanUp = (): void => { 
+	public cleanUp = (): void => { 
 		this._fileInput.removeEventListener("change", this._whenFileSelected);
 		this._cancelButton.removeEventListener("click", this._close);
 	}

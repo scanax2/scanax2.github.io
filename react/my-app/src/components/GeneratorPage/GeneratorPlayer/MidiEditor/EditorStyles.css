@@ -1,0 +1,71 @@
+#beepboxEditorContainer {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+div.beepboxEditor {
+    background: #0f0f0f;
+    color: #f0f0f0;
+    width: 100% !important; 
+    height: 555px;
+}
+
+div.pattern-area {
+    background: #0f0f0f;
+    color: #f0f0f0;
+    width: 100% !important; 
+    height: 455px !important;
+    overflow: scroll !important;
+}
+
+#injectMIDI {
+    display: none;
+}
+
+div.track-area {
+    background: #0f0f0f;
+    color: #f0f0f0;
+    width: 100% !important; 
+    min-width: 100% !important;
+}
+
+div.trackContainer {
+    background: #0f0f0f;
+    color: #f0f0f0;
+    width: 250px !important; 
+    min-width: 250px !important;
+}
+
+
+div.trackAndMuteContainer {
+    width: 100% !important;
+    min-width: 100% !important;
+    height: 70px;
+    margin-top: -15px;
+    @media (min-width: 711px) {
+        width: 100% !important;
+    }
+}
+
+div.trackContainer > .noSelection {
+    background: #0f0f0f;
+    color: #f0f0f0;
+    overflow-x: scroll;
+    overflow-y: scroll;
+    min-width: 250px !important;
+}
+
+div.settings-area {
+    background: #0f0f0f;
+    color: #f0f0f0;
+    align-self: start;
+    width: 500px !important;
+    overflow: scroll !important;
+    height: 555px !important;
+}
+
+div.barScrollBar {
+    width: 100% !important;
+    color: #f0f0f0;
+    background-color: aquamarine;
+}

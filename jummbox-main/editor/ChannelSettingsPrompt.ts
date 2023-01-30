@@ -93,7 +93,9 @@ export class ChannelSettingsPrompt implements Prompt {
 	}
 		
 		private _close = (): void => { 
-		this._doc.undo();
+			this._doc.prompt = null;
+			this._doc.goBackToStart();
+			this._doc.undo();
 	}
 		
 		public cleanUp = (): void => { 

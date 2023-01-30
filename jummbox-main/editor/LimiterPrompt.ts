@@ -379,6 +379,7 @@ export class LimiterPrompt implements Prompt {
 	}
 
 	private _close = (): void => {
+
 		// Reset all sliders to starting values
 		this.limitRatioSlider.value = "" + this.startingLimitRatio;
 		this.compressionRatioSlider.value = "" + this.startingCompressionRatio;
@@ -390,6 +391,7 @@ export class LimiterPrompt implements Prompt {
 
 		this._updateLimiter();
 		this._doc.prompt = null;
+		this._doc.goBackToStart();
 	}
 
 	public cleanUp = (): void => {

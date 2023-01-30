@@ -66,6 +66,8 @@ export class ThemePrompt implements Prompt {
 		} else {
 			ColorConfig.setTheme("dark classic");
 		}
+		this._doc.prompt = null;
+		this._doc.goBackToStart();
 		this._doc.undo();
 	}
 
